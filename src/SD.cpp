@@ -347,7 +347,12 @@ boolean SDClass::begin(uint8_t csPin) {
          root.openRoot(volume);
 }
 
-
+boolean SDClass::begin(uint32_t clock, uint8_t csPin) {
+  return card.init(SPI_HALF_SPEED, csPin) &&
+         card.setSpiClock(clock) &&
+         volume.init(card) &&
+         root.openRoot(volume);
+}
 
 // this little helper is used to traverse paths
 SdFile SDClass::getParentDir(const char *filepath, int *index) {

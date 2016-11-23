@@ -223,6 +223,9 @@ class Sd2Card {
   }
   void readEnd(void);
   uint8_t setSckRate(uint8_t sckRateID);
+#ifdef USE_SPI_LIB
+  uint8_t setSpiClock(uint32_t clock);
+#endif
   /** Return the card type: SD V1, SD V2 or SDHC */
   uint8_t type(void) const {return type_;}
   uint8_t writeBlock(uint32_t blockNumber, const uint8_t* src);

@@ -540,6 +540,15 @@ uint8_t Sd2Card::setSckRate(uint8_t sckRateID) {
 #endif // USE_SPI_LIB
   return true;
 }
+#ifdef USE_SPI_LIB
+//------------------------------------------------------------------------------
+// set the SPI clock frequency
+uint8_t Sd2Card::setSpiClock(uint32_t clock)
+{
+  settings = SPISettings(clock, MSBFIRST, SPI_MODE0);
+  return true;
+}
+#endif
 //------------------------------------------------------------------------------
 // wait for card to go not busy
 uint8_t Sd2Card::waitNotBusy(uint16_t timeoutMillis) {
