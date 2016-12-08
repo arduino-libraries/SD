@@ -569,6 +569,16 @@ boolean SDClass::remove(const char *filepath) {
   return walkPath(filepath, root, callback_remove);
 }
 
+String SDClass::getUniqueFileName(String expectedName, String expectedExtention)
+{
+  long counter = 0;
+  while (SD.exists(expectedName + String(counter) + "." + expectedExtention))
+  {
+    counter += 1;
+  }
+  return expectedName  + String(counter) + "." + expectedExtention;
+}
+
 
 // allows you to recurse into a directory
 File File::openNextFile(uint8_t mode) {

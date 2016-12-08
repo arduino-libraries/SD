@@ -23,7 +23,7 @@ close	KEYWORD2
 seek	KEYWORD2
 position	KEYWORD2
 size	KEYWORD2	
-
+getUniqueFileName   KEYWORD2
 #######################################
 # Constants (LITERAL1)
 #######################################
