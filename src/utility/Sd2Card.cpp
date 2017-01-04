@@ -106,18 +106,6 @@ void spiSend(uint8_t data) {
   sei();
 }
 #endif  // SOFTWARE_SPI
-
-void spiRec(uint8_t* data, int size) {
-#ifdef USE_SPI_LIB
-  SDCARD_SPI.transfer(data, size);
-#else
-  while (size) {
-    *data++ = spiRec();
-    size--;
-  }
-#endif
-}
-
 //------------------------------------------------------------------------------
 // send command and return error code.  Return zero for OK
 uint8_t Sd2Card::cardCommand(uint8_t cmd, uint32_t arg) {
@@ -442,7 +430,9 @@ uint8_t Sd2Card::readData(uint32_t block,
     spiRec();
   }
   // transfer data
-  spiRec(dst, count);
+  for (uint16_t i = 0; i < count; i++) {
+    dst[i] = spiRec();
+  }
 #endif  // OPTIMIZE_HARDWARE_SPI
 
   offset_ += count;
@@ -489,7 +479,7 @@ uint8_t Sd2Card::readRegister(uint8_t cmd, void* buf) {
   }
   if (!waitStartBlock()) goto fail;
   // transfer data
-  spiRec(dst, 16);
+  for (uint16_t i = 0; i < 16; i++) dst[i] = spiRec();
   spiRec();  // get first crc byte
   spiRec();  // get second crc byte
   chipSelectHigh();
