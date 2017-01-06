@@ -92,6 +92,9 @@ public:
   boolean rmdir(const char *filepath);
   boolean rmdir(const String &filepath) { return rmdir(filepath.c_str()); }
 
+//returns a unique name for the file with expectedfilename an extention.
+  String getUniqueFileName(String expectedName, String expectedExtention);
+
 private:
 
   // This is used to determine the mode used to open a file
