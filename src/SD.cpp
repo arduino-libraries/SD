@@ -342,16 +342,23 @@ boolean SDClass::begin(uint8_t csPin) {
     Return true if initialization succeeds, false otherwise.
 
    */
+  if (root.isOpen()) root.close();	// add by Tamakichi 2017/05/31
   return card.init(SPI_HALF_SPEED, csPin) &&
          volume.init(card) &&
          root.openRoot(volume);
 }
 
 boolean SDClass::begin(uint32_t clock, uint8_t csPin) {
+  if (root.isOpen()) root.close();	// add by Tamakichi 2017/05/31
   return card.init(SPI_HALF_SPEED, csPin) &&
          card.setSpiClock(clock) &&
          volume.init(card) &&
          root.openRoot(volume);
+}
+
+// add by Tamakichi 2017/05/31
+void SDClass::end() {
+  root.close();
 }
 
 // this little helper is used to traverse paths
