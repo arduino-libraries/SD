@@ -2,6 +2,11 @@
 
 The SD library allows for reading from and writing to SD cards.
 
+次の修正を行った. +
+1)SD.end()の追加 +
+2)SD.begin()で直前に利用していたリソース開放を行うように修正 +
+3)ファイル名に半角カタカタの利用が可能 +
+
 For more information about this library please visit us at
 http://www.arduino.cc/en/Reference/SD
 
