@@ -307,9 +307,22 @@ boolean callback_openPath(SdFile& parentDir, char *filePathComponent,
   return true;
 }
   */
-
-
-
+/*
+// add by Tamakichi 2017/06/6 not work!!
+boolean callback_rename(SdFile& parentDir, const char *old_fname, boolean isLastComponent, void * new_fname) {
+    uint8_t rc = true;
+	if (isLastComponent) {
+	    SdFile f;
+	//    if (!f.open(parentDir, old_fname, O_READ)) return false;
+	    if (!f.open(parentDir, old_fname, O_RDWR)) return false;
+		if (f.rename((const char*)new_fname)) {
+		   rc = false;
+		}
+   	    f.close();
+	}
+  return rc;
+}
+*/
 boolean callback_remove(SdFile& parentDir, const char *filePathComponent, 
 			boolean isLastComponent, void * /* object */) {
   if (isLastComponent) {
@@ -359,6 +372,7 @@ boolean SDClass::begin(uint32_t clock, uint8_t csPin) {
 // add by Tamakichi 2017/05/31
 void SDClass::end() {
   root.close();
+  card.end();
 }
 
 // this little helper is used to traverse paths
@@ -571,12 +585,17 @@ boolean SDClass::rmdir(const char *filepath) {
    */
   return walkPath(filepath, root, callback_rmdir);
 }
-
+/**	
+// Add by Tamalichi 2017/06/06 not work
+boolean SDClass::rename(const char *old_filepath, const char *new_filepath) {
+  return walkPath(old_filepath, root, callback_rename, (void*)new_filepath);
+}
+**/
 boolean SDClass::remove(const char *filepath) {
   return walkPath(filepath, root, callback_remove);
 }
 
-
+	
 // allows you to recurse into a directory
 File File::openNextFile(uint8_t mode) {
   dir_t p;

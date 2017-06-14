@@ -337,6 +337,16 @@ uint8_t Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
   chipSelectHigh();
   return false;
 }
+
+
+// Add by Tamakichi 2017/06/14
+void Sd2Card::end() {
+#ifdef USE_SPI_LIB
+  SDCARD_SPI.end();
+#endif
+}
+
+
 //------------------------------------------------------------------------------
 /**
  * Enable or disable partial block reads.

@@ -86,6 +86,9 @@ public:
   boolean mkdir(const char *filepath);
   boolean mkdir(const String &filepath) { return mkdir(filepath.c_str()); }
   
+  // Rename the file
+  //boolean rename(const char *old_filepath, const char *new_filepath); // Add by Tamalichi 2017/06/06 not work
+	
   // Delete the file.
   boolean remove(const char *filepath);
   boolean remove(const String &filepath) { return remove(filepath.c_str()); }
