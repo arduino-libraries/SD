@@ -358,6 +358,7 @@ uint8_t Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
 void Sd2Card::end() {
 #ifdef USE_SPI_LIB
   SDCARD_SPI.end();
+  digitalWrite(chipSelectPin_, LOW); // Add by Tamakichi 2017/08/1
 #endif
 }
 
