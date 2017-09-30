@@ -358,6 +358,12 @@ boolean SDClass::begin(uint32_t clock, uint8_t csPin) {
          root.openRoot(volume);
 }
 
+//call this when a card is removed. It will allow you to insert and initialise a new card.
+void SDClass::end()
+{
+  root.close();
+}
+
 // this little helper is used to traverse paths
 SdFile SDClass::getParentDir(const char *filepath, int *index) {
   // get parent directory
