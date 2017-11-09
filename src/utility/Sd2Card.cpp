@@ -248,7 +248,7 @@ uint8_t Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
   errorCode_ = inBlock_ = partialBlockRead_ = type_ = 0;
   chipSelectPin_ = chipSelectPin;
   // 16-bit init start time allows over a minute
-  uint16_t t0 = (uint16_t)millis();
+  uint32_t t0 = millis();
   uint32_t arg;
 
   // set pin modes
@@ -288,7 +288,7 @@ uint8_t Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
 
   // command to go idle in SPI mode
   while ((status_ = cardCommand(CMD0, 0)) != R1_IDLE_STATE) {
-    if (((uint16_t)(millis() - t0)) > SD_INIT_TIMEOUT) {
+    if ((int32_t)(millis() - t0) > SD_INIT_TIMEOUT) {
       error(SD_CARD_ERROR_CMD0);
       goto fail;
     }
@@ -310,7 +310,7 @@ uint8_t Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
 
   while ((status_ = cardAcmd(ACMD41, arg)) != R1_READY_STATE) {
     // check for timeout
-    if (((uint16_t)(millis() - t0)) > SD_INIT_TIMEOUT) {
+    if ((int32_t)(millis() - t0) > SD_INIT_TIMEOUT) {
       error(SD_CARD_ERROR_ACMD41);
       goto fail;
     }
@@ -542,19 +542,18 @@ uint8_t Sd2Card::setSpiClock(uint32_t clock)
 //------------------------------------------------------------------------------
 // wait for card to go not busy
 uint8_t Sd2Card::waitNotBusy(uint16_t timeoutMillis) {
-  uint16_t t0 = millis();
+  uint32_t t0 = millis();
   do {
     if (spiRec() == 0XFF) return true;
-  }
-  while (((uint16_t)millis() - t0) < timeoutMillis);
+  } while ((int32_t)(millis() - t0) < timeoutMillis);
   return false;
 }
 //------------------------------------------------------------------------------
 /** Wait for start block token */
 uint8_t Sd2Card::waitStartBlock(void) {
-  uint16_t t0 = millis();
+  uint32_t t0 = millis();
   while ((status_ = spiRec()) == 0XFF) {
-    if (((uint16_t)millis() - t0) > SD_READ_TIMEOUT) {
+    if ((int32_t)(millis() - t0) > SD_READ_TIMEOUT) {
       error(SD_CARD_ERROR_READ_TIMEOUT);
       goto fail;
     }
