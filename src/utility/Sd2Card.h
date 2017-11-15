@@ -107,13 +107,13 @@ uint8_t const SPI_SCK_PIN = 13;
 /** Protect block zero from write if nonzero */
 #define SD_PROTECT_BLOCK_ZERO 1
 /** init timeout ms */
-uint16_t const SD_INIT_TIMEOUT = 2000;
+unsigned int const SD_INIT_TIMEOUT = 2000;
 /** erase timeout ms */
-uint16_t const SD_ERASE_TIMEOUT = 10000;
+unsigned int const SD_ERASE_TIMEOUT = 10000;
 /** read timeout ms */
-uint16_t const SD_READ_TIMEOUT = 300;
+unsigned int const SD_READ_TIMEOUT = 300;
 /** write time out ms */
-uint16_t const SD_WRITE_TIMEOUT = 600;
+unsigned int const SD_WRITE_TIMEOUT = 600;
 //------------------------------------------------------------------------------
 // SD card errors
 /** timeout error for command CMD0 */
@@ -253,7 +253,7 @@ class Sd2Card {
   void chipSelectHigh(void);
   void chipSelectLow(void);
   void type(uint8_t value) {type_ = value;}
-  uint8_t waitNotBusy(uint16_t timeoutMillis);
+  uint8_t waitNotBusy(unsigned int timeoutMillis);
   uint8_t writeData(uint8_t token, const uint8_t* src);
   uint8_t waitStartBlock(void);
 };
