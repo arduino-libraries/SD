@@ -21,7 +21,7 @@
 #include <utility/SdFatUtil.h>
 
 #define FILE_READ O_READ
-#define FILE_WRITE (O_READ | O_WRITE | O_CREAT)
+#define FILE_WRITE (O_READ | O_WRITE | O_CREAT | O_APPEND)
 
 namespace SDLib {
 
