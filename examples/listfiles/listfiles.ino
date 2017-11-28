@@ -37,7 +37,7 @@ void setup() {
 
   if (!SD.begin(4)) {
     Serial.println("initialization failed!");
-    return;
+    while (1);
   }
   Serial.println("initialization done.");
 

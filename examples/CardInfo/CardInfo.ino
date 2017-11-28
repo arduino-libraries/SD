@@ -52,7 +52,7 @@ void setup() {
     Serial.println("* is a card inserted?");
     Serial.println("* is your wiring correct?");
     Serial.println("* did you change the chipSelect pin to match your shield or module?");
-    return;
+    while (1);
   } else {
     Serial.println("Wiring is correct and a card is present.");
   }
@@ -77,7 +77,7 @@ void setup() {
   // Now we will try to open the 'volume'/'partition' - it should be FAT16 or FAT32
   if (!volume.init(card)) {
     Serial.println("Could not find FAT16/FAT32 partition.\nMake sure you've formatted the card");
-    return;
+    while (1);
   }
 
   Serial.print("Clusters:          ");
