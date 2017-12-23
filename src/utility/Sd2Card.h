@@ -45,6 +45,11 @@ uint8_t const SPI_QUARTER_SPEED = 2;
  * but many SD cards will fail with GPS Shield V1.0.
  */
 #define MEGA_SOFT_SPI 0
+
+#if MEGA_SOFT_SPI
+#undef USE_SPI_LIB
+#endif
+
 //------------------------------------------------------------------------------
 #if MEGA_SOFT_SPI && (defined(__AVR_ATmega1280__)||defined(__AVR_ATmega2560__))
 #define SOFTWARE_SPI

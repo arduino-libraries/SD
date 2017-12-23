@@ -353,7 +353,9 @@ boolean SDClass::begin(uint32_t clock, uint8_t csPin) {
   if(root.isOpen()) root.close();
 
   return card.init(SPI_HALF_SPEED, csPin) &&
+#ifdef USE_SPI_LIB
          card.setSpiClock(clock) &&
+#endif
          volume.init(card) &&
          root.openRoot(volume);
 }

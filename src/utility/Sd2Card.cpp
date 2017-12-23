@@ -17,7 +17,6 @@
  * along with the Arduino Sd2Card Library.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-#define USE_SPI_LIB
 #include <Arduino.h>
 #include "Sd2Card.h"
 //------------------------------------------------------------------------------
