@@ -403,6 +403,7 @@ SdFile SDClass::getParentDir(const char *filepath, int *index) {
     subdir->close();
     if (! subdir->open(parent, subdirname, O_READ)) {
       // failed to open one of the subdirectories
+      *index = 0;
       return SdFile();
     }
     // move forward to the next subdirectory
