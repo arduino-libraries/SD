@@ -586,7 +586,7 @@ namespace SDLib {
     dir_t p;
 
     //Serial.print("\t\treading dir...");
-    while (_file->readDir(&p) > 0) {
+    while (_file.readDir(&p) > 0) {
 
       // done if past last used entry
       if (p.name[0] == DIR_NAME_FREE) {
@@ -609,7 +609,7 @@ namespace SDLib {
       // print file name with possible blank fill
       SdFile f;
       char name[13];
-      _file->dirName(p, name);
+      _file.dirName(p, name);
       //Serial.print("try to open file ");
       //Serial.println(name);
 
@@ -628,7 +628,7 @@ namespace SDLib {
 
   void File::rewindDirectory(void) {
     if (isDirectory()) {
-      _file->rewind();
+      _file.rewind();
     }
   }
 
