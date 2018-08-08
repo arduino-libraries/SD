@@ -34,6 +34,8 @@
 // SD card commands
 /** GO_IDLE_STATE - init card in spi mode if CS low */
 uint8_t const CMD0 = 0X00;
+//SEND_OP_COND
+uint8_t const CMD1 = 0x01; // 2017/07/11 add by Tamakichi
 /** SEND_IF_COND - verify SD Memory Card interface operating condition.*/
 uint8_t const CMD8 = 0X08;
 /** SEND_CSD - read the Card Specific Data (CSD register) */

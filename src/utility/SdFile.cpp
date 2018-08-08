@@ -268,8 +268,9 @@ uint8_t SdFile::make83Name(const char* str, uint8_t* name) {
       while ((b = *p++)) if (b == c) return false;
 #endif
       // check size and only allow ASCII printable characters
-      if (i > n || c < 0X21 || c > 0X7E)return false;
-      // only upper case allowed in 8.3 names - convert lower to upper
+//      if (i > n || c < 0X21 || c > 0X7E)return false;
+        if (i > n || c < 0X21 || c == 0X7F)return false;  // Modified by Tamakichi,2017/06/03
+    	// only upper case allowed in 8.3 names - convert lower to upper
       name[i++] = c < 'a' || c > 'z' ?  c : c + ('A' - 'a');
     }
   }
@@ -764,6 +765,38 @@ dir_t* SdFile::readDirCache(void) {
   // return pointer to entry
   return (SdVolume::cacheBuffer_.dir + i);
 }
+//------------------------------------------------------------------------------
+/**
+ * rename a file.  add by Tamalichi 2017/06/06 not work
+ */
+/*
+uint8_t SdFile::rename(const char* fileName) {
+  uint8_t dname[11];
+Serial.println("STEP0");
+	// free any clusters - will fail if read-only or directory
+  if (!truncate(0)) return false;
+Serial.println("STEP1");
+  if (!make83Name(fileName, dname)) return false;
+Serial.println("STEP2");
+	
+  // cache directory entry
+  dir_t* d = cacheDirEntry(SdVolume::CACHE_FOR_WRITE);
+  if (!d) return false;
+Serial.println("STEP3");
+
+  // rename
+  memcpy(d->name, dname, 11);
+Serial.println((char*)d->name);
+
+  // set this SdFile closed
+  //type_ = FAT_FILE_TYPE_CLOSED;
+  type_ =FAT_FILE_TYPE_NORMAL;
+  // write entry to SD
+  SdVolume::cacheSetDirty();
+  return sync();
+}
+*/
+
 //------------------------------------------------------------------------------
 /**
  * Remove a file.

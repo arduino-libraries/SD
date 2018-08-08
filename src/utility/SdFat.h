@@ -242,6 +242,7 @@ class SdFile : public Print {
   }
   int16_t read(void* buf, uint16_t nbyte);
   int8_t readDir(dir_t* dir);
+  uint8_t rename(const char* fileName); // Add by Tamakichi 2017/06/06
   static uint8_t remove(SdFile* dirFile, const char* fileName);
   uint8_t remove(void);
   /** Set the file's current position to zero. */

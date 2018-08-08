@@ -245,7 +245,8 @@ uint8_t Sd2Card::eraseSingleBlockEnable(void) {
  * can be determined by calling errorCode() and errorData().
  */
 uint8_t Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
-  errorCode_ = inBlock_ = partialBlockRead_ = type_ = 0;
+   bool useCmd1 = false; // 2017/07/11 add by Tamakichi 
+   errorCode_ = inBlock_ = partialBlockRead_ = type_ = 0;
   chipSelectPin_ = chipSelectPin;
   // 16-bit init start time allows over a minute
   unsigned int t0 = millis();
@@ -308,7 +309,7 @@ uint8_t Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
   }
   // initialize card and send host supports SDHC if SD2
   arg = type() == SD_CARD_TYPE_SD2 ? 0X40000000 : 0;
-
+/*
   while ((status_ = cardAcmd(ACMD41, arg)) != R1_READY_STATE) {
     // check for timeout
     unsigned int d = millis() - t0;
@@ -317,6 +318,20 @@ uint8_t Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
       goto fail;
     }
   }
+*/
+	
+  status_ = cardAcmd(ACMD41, arg);
+  while (status_ != R1_READY_STATE) {
+    // check for timeout
+    if (((uint16_t)millis() - t0) > SD_INIT_TIMEOUT) {
+      error(SD_CARD_ERROR_ACMD41);
+      goto fail;
+    }
+    // Switch to CMD1 if the card fails to recognize ACMD41
+    if (status_ & R1_ILLEGAL_COMMAND) useCmd1 = true;
+    status_ = (!useCmd1 ? cardAcmd(ACMD41, arg) : cardCommand(CMD1, 0));
+  }
+	
   // if SD2 read OCR register to check for SDHC card
   if (type() == SD_CARD_TYPE_SD2) {
     if (cardCommand(CMD58, 0)) {
@@ -339,6 +354,17 @@ uint8_t Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
   chipSelectHigh();
   return false;
 }
+
+
+// Add by Tamakichi 2017/06/14
+void Sd2Card::end() {
+#ifdef USE_SPI_LIB
+  SDCARD_SPI.end();
+  digitalWrite(chipSelectPin_, LOW); // Add by Tamakichi 2017/08/1
+#endif
+}
+
+
 //------------------------------------------------------------------------------
 /**
  * Enable or disable partial block reads.
