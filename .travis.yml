@@ -48,3 +48,10 @@ script:
   - buildExampleSketch listfiles
   - buildExampleSketch ReadWrite
 
+notifications:
+  webhooks:
+    # use TravisBuddy to comment on any pull request that results in a failed CI build
+    urls:
+      - https://www.travisbuddy.com/
+    on_success: never
+    on_failure: always
