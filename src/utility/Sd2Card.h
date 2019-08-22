@@ -236,10 +236,11 @@ class Sd2Card {
     uint8_t type(void) const {
       return type_;
     }
-    uint8_t writeBlock(uint32_t blockNumber, const uint8_t* src);
+    uint8_t writeBlock(uint32_t blockNumber, const uint8_t* src, uint8_t blocking = 1);
     uint8_t writeData(const uint8_t* src);
     uint8_t writeStart(uint32_t blockNumber, uint32_t eraseCount);
     uint8_t writeStop(void);
+    uint8_t isBusy(void);
   private:
     uint32_t block_;
     uint8_t chipSelectPin_;

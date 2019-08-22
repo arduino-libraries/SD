@@ -73,6 +73,13 @@ size_t File::write(const uint8_t *buf, size_t size) {
   return t;
 }
 
+int File::availableForWrite() {
+  if (_file) {
+    return _file->availableForWrite();
+  }
+  return 0;
+}
+
 int File::peek() {
   if (! _file) {
     return 0;
