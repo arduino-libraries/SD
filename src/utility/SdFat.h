@@ -295,7 +295,7 @@ class SdFile : public Print {
     }
     uint8_t timestamp(uint8_t flag, uint16_t year, uint8_t month, uint8_t day,
                       uint8_t hour, uint8_t minute, uint8_t second);
-    uint8_t sync(void);
+    uint8_t sync(uint8_t blocking = 1);
     /** Type of this SdFile.  You should use isFile() or isDir() instead of type()
        if possible.
 
@@ -320,6 +320,7 @@ class SdFile : public Print {
     void write_P(PGM_P str);
     void writeln_P(PGM_P str);
     #endif
+    int availableForWrite(void);
     //------------------------------------------------------------------------------
     #if ALLOW_DEPRECATED_FUNCTIONS
     // Deprecated functions  - suppress cpplint warnings with NOLINT comment
@@ -407,14 +408,16 @@ class SdFile : public Print {
     // should be 0XF
     static uint8_t const F_OFLAG = (O_ACCMODE | O_APPEND | O_SYNC);
     // available bits
-    static uint8_t const F_UNUSED = 0X30;
+    static uint8_t const F_FILE_NON_BLOCKING_WRITE = 0X10;
+    // a new cluster was added to the file
+    static uint8_t const F_FILE_CLUSTER_ADDED = 0X20;
     // use unbuffered SD read
     static uint8_t const F_FILE_UNBUFFERED_READ = 0X40;
     // sync of directory entry required
     static uint8_t const F_FILE_DIR_DIRTY = 0X80;
 
     // make sure F_OFLAG is ok
-    #if ((F_UNUSED | F_FILE_UNBUFFERED_READ | F_FILE_DIR_DIRTY) & F_OFLAG)
+    #if ((F_FILE_NON_BLOCKING_WRITE | F_FILE_CLUSTER_ADDED | F_FILE_UNBUFFERED_READ | F_FILE_DIR_DIRTY) & F_OFLAG)
 #error flags_ bits conflict
     #endif  // flags_ bits
 
@@ -587,7 +590,8 @@ class SdVolume {
     uint32_t blockNumber(uint32_t cluster, uint32_t position) const {
       return clusterStartBlock(cluster) + blockOfCluster(position);
     }
-    static uint8_t cacheFlush(void);
+    static uint8_t cacheFlush(uint8_t blocking = 1);
+    static uint8_t cacheMirrorBlockFlush(uint8_t blocking);
     static uint8_t cacheRawBlock(uint32_t blockNumber, uint8_t action);
     static void cacheSetDirty(void) {
       cacheDirty_ |= CACHE_FOR_WRITE;
@@ -610,8 +614,14 @@ class SdVolume {
                      uint16_t count, uint8_t* dst) {
       return sdCard_->readData(block, offset, count, dst);
     }
-    uint8_t writeBlock(uint32_t block, const uint8_t* dst) {
-      return sdCard_->writeBlock(block, dst);
+    uint8_t writeBlock(uint32_t block, const uint8_t* dst, uint8_t blocking = 1) {
+      return sdCard_->writeBlock(block, dst, blocking);
+    }
+    uint8_t isBusy(void) {
+      return sdCard_->isBusy();
+    }
+    uint8_t isCacheMirrorBlockDirty(void) {
+      return (cacheMirrorBlock_ != 0);
     }
 };
 #endif  // SdFat_h

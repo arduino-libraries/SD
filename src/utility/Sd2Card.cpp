@@ -608,10 +608,11 @@ fail:
 
    \param[in] blockNumber Logical block to be written.
    \param[in] src Pointer to the location of the data to be written.
+   \param[in] blocking If the write should be blocking.
    \return The value one, true, is returned for success and
    the value zero, false, is returned for failure.
 */
-uint8_t Sd2Card::writeBlock(uint32_t blockNumber, const uint8_t* src) {
+uint8_t Sd2Card::writeBlock(uint32_t blockNumber, const uint8_t* src, uint8_t blocking) {
   #if SD_PROTECT_BLOCK_ZERO
   // don't allow write to first block
   if (blockNumber == 0) {
@@ -631,16 +632,17 @@ uint8_t Sd2Card::writeBlock(uint32_t blockNumber, const uint8_t* src) {
   if (!writeData(DATA_START_BLOCK, src)) {
     goto fail;
   }
-
-  // wait for flash programming to complete
-  if (!waitNotBusy(SD_WRITE_TIMEOUT)) {
-    error(SD_CARD_ERROR_WRITE_TIMEOUT);
-    goto fail;
-  }
-  // response is r2 so get and check two bytes for nonzero
-  if (cardCommand(CMD13, 0) || spiRec()) {
-    error(SD_CARD_ERROR_WRITE_PROGRAMMING);
-    goto fail;
+  if (blocking) {
+    // wait for flash programming to complete
+    if (!waitNotBusy(SD_WRITE_TIMEOUT)) {
+      error(SD_CARD_ERROR_WRITE_TIMEOUT);
+      goto fail;
+    }
+    // response is r2 so get and check two bytes for nonzero
+    if (cardCommand(CMD13, 0) || spiRec()) {
+      error(SD_CARD_ERROR_WRITE_PROGRAMMING);
+      goto fail;
+    }
   }
   chipSelectHigh();
   return true;
@@ -759,4 +761,17 @@ fail:
   error(SD_CARD_ERROR_STOP_TRAN);
   chipSelectHigh();
   return false;
+}
+//------------------------------------------------------------------------------
+/** Check if the SD card is busy
+
+  \return The value one, true, is returned when is busy and
+   the value zero, false, is returned for when is NOT busy.
+*/
+uint8_t Sd2Card::isBusy(void) {
+  chipSelectLow();
+  byte b = spiRec();
+  chipSelectHigh();
+
+  return (b != 0XFF);
 }

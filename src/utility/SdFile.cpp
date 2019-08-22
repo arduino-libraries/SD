@@ -42,6 +42,7 @@ uint8_t SdFile::addCluster() {
     firstCluster_ = curCluster_;
     flags_ |= F_FILE_DIR_DIRTY;
   }
+  flags_ |= F_FILE_CLUSTER_ADDED;
   return true;
 }
 //------------------------------------------------------------------------------
@@ -1121,12 +1122,14 @@ uint8_t SdFile::seekSet(uint32_t pos) {
    The sync() call causes all modified data and directory fields
    to be written to the storage device.
 
+   \param[in] blocking If the sync should block until fully complete.
+
    \return The value one, true, is returned for success and
    the value zero, false, is returned for failure.
    Reasons for failure include a call to sync() before a file has been
    opened or an I/O error.
 */
-uint8_t SdFile::sync(void) {
+uint8_t SdFile::sync(uint8_t blocking) {
   // only allow open files and directories
   if (!isOpen()) {
     return false;
@@ -1155,7 +1158,12 @@ uint8_t SdFile::sync(void) {
     // clear directory dirty
     flags_ &= ~F_FILE_DIR_DIRTY;
   }
-  return SdVolume::cacheFlush();
+
+  if (!blocking) {
+    flags_ &= ~F_FILE_NON_BLOCKING_WRITE;
+  }
+
+  return SdVolume::cacheFlush(blocking);
 }
 //------------------------------------------------------------------------------
 /**
@@ -1325,6 +1333,8 @@ size_t SdFile::write(const void* buf, uint16_t nbyte) {
 
   // number of bytes left to write  -  must be before goto statements
   uint16_t nToWrite = nbyte;
+  // if blocking writes should be used
+  uint8_t blocking = (flags_ & F_FILE_NON_BLOCKING_WRITE) == 0x00;
 
   // error if not a normal file or is read-only
   if (!isFile() || !(flags_ & O_WRITE)) {
@@ -1383,7 +1393,7 @@ size_t SdFile::write(const void* buf, uint16_t nbyte) {
       if (SdVolume::cacheBlockNumber_ == block) {
         SdVolume::cacheBlockNumber_ = 0XFFFFFFFF;
       }
-      if (!vol_->writeBlock(block, src)) {
+      if (!vol_->writeBlock(block, src, blocking)) {
         goto writeErrorReturn;
       }
       src += 512;
@@ -1473,3 +1483,45 @@ void SdFile::writeln_P(PGM_P str) {
   println();
 }
 #endif
+//------------------------------------------------------------------------------
+/**
+   Check how many bytes can be written without blocking.
+
+   \return The number of bytes that can be written without blocking.
+*/
+int SdFile::availableForWrite() {
+  if (!isFile() || !(flags_ & O_WRITE)) {
+    return 0;
+  }
+
+  // seek to end of file if append flag
+  if ((flags_ & O_APPEND) && curPosition_ != fileSize_) {
+    if (!seekEnd()) {
+      return 0;
+    }
+  }
+
+  if (vol_->isBusy()) {
+    return 0;
+  }
+
+  if (flags_ & F_FILE_CLUSTER_ADDED) {
+    // new cluster added, trigger a non-blocking sync
+    sync(0);
+    flags_ &= ~F_FILE_CLUSTER_ADDED;
+    return 0;
+  }
+
+  if (vol_->isCacheMirrorBlockDirty()) {
+    // cache mirror block is dirty, trigger a non-blocking sync
+    vol_->cacheMirrorBlockFlush(0);
+    return 0;
+  }
+
+  flags_ |= F_FILE_NON_BLOCKING_WRITE;
+
+  uint16_t blockOffset = curPosition_ & 0X1FF;
+  uint16_t n = 512 - blockOffset;
+
+  return n;
+}

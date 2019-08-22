@@ -108,19 +108,31 @@ uint8_t SdVolume::allocContiguous(uint32_t count, uint32_t* curCluster) {
   return true;
 }
 //------------------------------------------------------------------------------
-uint8_t SdVolume::cacheFlush(void) {
+uint8_t SdVolume::cacheFlush(uint8_t blocking) {
   if (cacheDirty_) {
-    if (!sdCard_->writeBlock(cacheBlockNumber_, cacheBuffer_.data)) {
+    if (!sdCard_->writeBlock(cacheBlockNumber_, cacheBuffer_.data, blocking)) {
       return false;
     }
+
+    if (!blocking) {
+      return true;
+    }
+
     // mirror FAT tables
-    if (cacheMirrorBlock_) {
-      if (!sdCard_->writeBlock(cacheMirrorBlock_, cacheBuffer_.data)) {
-        return false;
-      }
-      cacheMirrorBlock_ = 0;
+    if (!cacheMirrorBlockFlush(blocking)) {
+      return false;
     }
     cacheDirty_ = 0;
+  }
+  return true;
+}
+//------------------------------------------------------------------------------
+uint8_t SdVolume::cacheMirrorBlockFlush(uint8_t blocking) {
+  if (cacheMirrorBlock_) {
+    if (!sdCard_->writeBlock(cacheMirrorBlock_, cacheBuffer_.data, blocking)) {
+      return false;
+    }
+    cacheMirrorBlock_ = 0;
   }
   return true;
 }
