@@ -455,7 +455,7 @@ namespace SDLib {
 
     int pathidx;
 
-    // do the interative search
+    // do the interactive search
     SdFile parentdir = getParentDir(filepath, &pathidx);
     // no more subdirs!
 
