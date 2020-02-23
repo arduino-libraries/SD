@@ -41,7 +41,7 @@ void setup() {
     Serial.println("Note: press reset or reopen this serial monitor after fixing your issue!");
     while (1);
   }
-  
+
   Serial.println("initialization done.");
 
   // open the file. note that only one file can be open at a time,
