@@ -41,17 +41,17 @@ class SdVolume;
 // SdFile class
 
 #ifdef O_RDONLY //ARDUINO_ARCH_MBED
-#undef O_READ
-#undef O_RDONLY
-#undef O_WRITE
-#undef O_WRONLY
-#undef O_RDWR
-#undef O_ACCMODE
-#undef O_APPEND
-#undef O_SYNC
-#undef O_CREAT
-#undef O_EXCL
-#undef O_TRUNC
+  #undef O_READ
+  #undef O_RDONLY
+  #undef O_WRITE
+  #undef O_WRONLY
+  #undef O_RDWR
+  #undef O_ACCMODE
+  #undef O_APPEND
+  #undef O_SYNC
+  #undef O_CREAT
+  #undef O_EXCL
+  #undef O_TRUNC
 #endif
 
 // flags for ls()
