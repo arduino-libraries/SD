@@ -118,11 +118,11 @@ namespace SDLib {
 
 
   bool walkPath(const char *filepath, SdFile& parentDir,
-                   bool(*callback)(SdFile& parentDir,
-                                      const char *filePathComponent,
-                                      bool isLastComponent,
-                                      void *object),
-                   void *object = NULL) {
+                bool(*callback)(SdFile& parentDir,
+                                const char *filePathComponent,
+                                bool isLastComponent,
+                                void *object),
+                void *object = NULL) {
     /*
 
        When given a file path (and parent directory--normally root),
@@ -233,7 +233,7 @@ namespace SDLib {
   */
 
   bool callback_pathExists(SdFile& parentDir, const char *filePathComponent,
-                              bool /* isLastComponent */, void * /* object */) {
+                           bool /* isLastComponent */, void * /* object */) {
     /*
 
       Callback used to determine if a file/directory exists in parent
@@ -256,7 +256,7 @@ namespace SDLib {
 
 
   bool callback_makeDirPath(SdFile& parentDir, const char *filePathComponent,
-                               bool isLastComponent, void *object) {
+                            bool isLastComponent, void *object) {
     /*
 
       Callback used to create a directory in the parent directory if
@@ -280,7 +280,7 @@ namespace SDLib {
   /*
 
     bool callback_openPath(SdFile& parentDir, char *filePathComponent,
-		bool isLastComponent, void *object) {
+  	  bool isLastComponent, void *object) {
 
     Callback used to open a file specified by a filepath that may
     specify one or more directories above it.
@@ -311,7 +311,7 @@ namespace SDLib {
 
 
   bool callback_remove(SdFile& parentDir, const char *filePathComponent,
-                          bool isLastComponent, void * /* object */) {
+                       bool isLastComponent, void * /* object */) {
     if (isLastComponent) {
       return SdFile::remove(parentDir, filePathComponent);
     }
@@ -319,7 +319,7 @@ namespace SDLib {
   }
 
   bool callback_rmdir(SdFile& parentDir, const char *filePathComponent,
-                         bool isLastComponent, void * /* object */) {
+                      bool isLastComponent, void * /* object */) {
     if (isLastComponent) {
       SdFile f;
       if (!f.open(parentDir, filePathComponent, O_READ)) {
