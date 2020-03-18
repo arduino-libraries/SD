@@ -41,14 +41,14 @@ namespace SDLib {
       virtual int available();
       virtual void flush();
       int read(void *buf, uint16_t nbyte);
-      boolean seek(uint32_t pos);
+      bool seek(uint32_t pos);
       uint32_t position();
       uint32_t size();
       void close();
       operator bool();
       char * name();
 
-      boolean isDirectory(void);
+      bool isDirectory(void);
       File openNextFile(uint8_t mode = O_RDONLY);
       void rewindDirectory(void);
 
@@ -68,8 +68,8 @@ namespace SDLib {
     public:
       // This needs to be called to set up the connection to the SD card
       // before other methods are used.
-      boolean begin(uint8_t csPin = SD_CHIP_SELECT_PIN);
-      boolean begin(uint32_t clock, uint8_t csPin);
+      bool begin(uint8_t csPin = SD_CHIP_SELECT_PIN);
+      bool begin(uint32_t clock, uint8_t csPin);
 
       //call this when a card is removed. It will allow you to insert and initialise a new card.
       void end();
@@ -83,26 +83,26 @@ namespace SDLib {
       }
 
       // Methods to determine if the requested file path exists.
-      boolean exists(const char *filepath);
-      boolean exists(const String &filepath) {
+      bool exists(const char *filepath);
+      bool exists(const String &filepath) {
         return exists(filepath.c_str());
       }
 
       // Create the requested directory heirarchy--if intermediate directories
       // do not exist they will be created.
-      boolean mkdir(const char *filepath);
-      boolean mkdir(const String &filepath) {
+      bool mkdir(const char *filepath);
+      bool mkdir(const String &filepath) {
         return mkdir(filepath.c_str());
       }
 
       // Delete the file.
-      boolean remove(const char *filepath);
-      boolean remove(const String &filepath) {
+      bool remove(const char *filepath);
+      bool remove(const String &filepath) {
         return remove(filepath.c_str());
       }
 
-      boolean rmdir(const char *filepath);
-      boolean rmdir(const String &filepath) {
+      bool rmdir(const char *filepath);
+      bool rmdir(const String &filepath) {
         return rmdir(filepath.c_str());
       }
 
@@ -116,7 +116,7 @@ namespace SDLib {
       int fileOpenMode;
 
       friend class File;
-      friend boolean callback_openPath(SdFile&, const char *, boolean, void *);
+      friend bool callback_openPath(SdFile&, const char *, bool, void *);
   };
 
   extern SDClass SD;
