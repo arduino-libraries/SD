@@ -47,19 +47,19 @@ void setup() {
   waitip();
   ch = Serial.parseInt();//get choice input
 
-  if (ch == 1)  //for reading the file
-  {
+  //for reading the file
+  if (ch == 1) {
     Serial.println("Enter file name to read file data:");//ask user for file name eg. test.txt
     waitip();
     fname = Serial.readString();
     fname.trim();
 
-    if (SD.exists(fname)) { //if file already exists
+    if (SD.exists(fname)) {
+      //if file already exists
 
       myFile = SD.open(fname);
       if (myFile) {
         Serial.println(" " + fname);
-
         // read from the file until there's nothing else in it:
         while (myFile.available()) {
           Serial.write(myFile.read());
@@ -67,13 +67,12 @@ void setup() {
         // close the file:
         myFile.close();
       }
-    }
-    else { //if file not exists show the message
+    } else {
+      //if file not exists show the message
       Serial.println(fname + " doesn't exist.");
     }
-  }
-
-  else if (ch == 2) {  //writing to the file
+  } else if (ch == 2) {
+    //writing to the file
     Serial.println("Enter file name :");//ask user for file name
     waitip();
     fname = Serial.readString();
@@ -92,15 +91,12 @@ void setup() {
       // close the file:
       myFile.close();
       Serial.println("done.");
-
     }  else {
       // if the file didn't open, print an error:
       Serial.println("error opening test.txt");
     }
-  }
-
-  else // if user enters wrong choice
-  {
+  } else {
+    // if user enters wrong choice
     Serial.println("Error:wrong choice!!");
   }
 }
@@ -109,15 +105,14 @@ void loop() {
   // nothing happens after setup
 }
 
-
-void waitip()// wait for user input
-{
+// wait for user input
+void waitip() {
   while (Serial.available() == 0)
   {}
 }
 
-void printDirectory(File dir, int numTabs) // prints directory list
-{
+// prints directory list
+void printDirectory(File dir, int numTabs) {
   while (true) {
 
     File entry =  dir.openNextFile();

@@ -24,8 +24,7 @@ void setup() {
     ; // wait for serial port to connect. Needed for native USB port only
   }
   Serial.print("Initializing SD card...");
-  if (!SD.begin(4))
-  {
+  if (!SD.begin(4)) {
     Serial.println("initialization failed!");
     while (1);
   }
@@ -40,33 +39,30 @@ void setup() {
   //wait for input
   waitip();
   ch = Serial.parseInt();//get choice input
-
-  if (ch == 1)  //for creating directory
-  {
+  //for creating directory
+  if (ch == 1) {
     Serial.println("Enter directory name to create:");//ask user for directory name
     waitip();
     dir = Serial.readString();
     dir.trim();
 
-    if (SD.exists(dir)) { //if directory already exists
+    //if directory already exists
+    if (SD.exists(dir)) {
       Serial.println(dir + " already exists!");
-
-    } else { //if directory not exists create one
+    } else {
+      //if directory not exists create one
       Serial.println(dir + " doesn't exist.");
       Serial.println("Creating directory..");
       SD.mkdir(dir);  // creating directory
-       
-      if (SD.exists(dir))
-      {
-        Serial.println(dir + " created!!");
 
-      } else
-      {
+      if (SD.exists(dir)) {
+        Serial.println(dir + " created!!");
+      } else {
         Serial.println("Error: " + dir + " not created");
       }
     }
-  }
-  else if (ch == 2) {  //for deleting directory
+  } else if (ch == 2) {
+    //for deleting directory
     Serial.println("Enter directory name to delete:");//ask user for directory name
     waitip();
     dir = Serial.readString();
@@ -74,22 +70,17 @@ void setup() {
     if (SD.exists(dir)) { //if directory already exists then delete it.
       SD.rmdir(dir);    //deleting directory.
 
-      if (SD.exists(dir))
-      {
+      if (SD.exists(dir)) {
         Serial.println("Error: " + dir + " not deleted!!");
-      }
-      else {
+      } else {
         Serial.println(" " + dir + " deleted!!");
-
       }
-    }
-    else   //if directory not exists then show error message.
-    {
+    } else {
+      //if directory not exists then show error message.
       Serial.println("Error: " + dir + " not exists!!");
     }
-  }
-  else // if user enters wrong choice
-  {
+  } else {
+    // if user enters wrong choice
     Serial.println("Error:wrong choice!!");
   }
 }
@@ -98,13 +89,14 @@ void loop() {
   // nothing happens after setup finishes.
 }
 
-void waitip()// wait for user input
-{
+// wait for user input
+void waitip() {
   while (Serial.available() == 0)
   {}
 }
-void printDirectory(File dir, int numTabs) // prints directory list
-{
+
+// prints directory list
+void printDirectory(File dir, int numTabs) {
   while (true) {
 
     File entry =  dir.openNextFile();

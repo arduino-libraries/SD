@@ -46,57 +46,49 @@ void setup() {
   waitip();
   ch = Serial.parseInt();//get choice input
 
-
-  if (ch == 1)  //for creating file
-  {
-    Serial.println("Enter file name to create file:");//ask user for file name eg. test.txt
+  //for creating file
+  if (ch == 1) {
+    Serial.println("Enter file name to create file:"); //ask user for file name eg. test.txt
     waitip();
     fname = Serial.readString();
     fname.trim();
-
-    if (SD.exists(fname)) { //if file already exists
+    //if file already exists
+    if (SD.exists(fname)) {
       Serial.println(fname + " already exists!");
 
-    } else { //if file not exists create one
+    } else {
+      //if file not exists create one
       Serial.println(fname + " doesn't exist.");
       Serial.println("Creating file..");
       myFile = SD.open(fname, FILE_WRITE); // creating file
       myFile.close();
-      if (SD.exists(fname))
-      {
+      if (SD.exists(fname)) {
         Serial.println(fname + " created!!");
-
-      } else
-      {
+      } else {
         Serial.println("Error: " + fname + " not created");
       }
     }
-  }
-  else if (ch == 2) {  //for deleting file
+  } else if (ch == 2) {
+    //for deleting file
     Serial.println("Enter file name to delete:");//ask user for file name
     waitip();
     fname = Serial.readString();
     fname.trim();
-    if (SD.exists(fname)) { //if file already exists then delete it.
-
+    //if file already exists then delete it.
+    if (SD.exists(fname)) {
       SD.remove(fname); // deleting file.
 
-      if (SD.exists(fname))
-      {
+      if (SD.exists(fname)) {
         Serial.println("Error: " + fname + " not deleted!!");
-      }
-      else {
+      } else {
         Serial.println(" " + fname + " deleted!!");
-
       }
-    }
-    else   //if file not exists then show error message.
-    {
+    } else {
+      //if file not exists then show error message.
       Serial.println("Error: " + fname + " not exists!!");
     }
-  }
-  else // if user enters wrong choice
-  {
+  } else {
+    // if user enters wrong choice
     Serial.println("Error:wrong choice!!");
   }
 }
@@ -105,14 +97,14 @@ void loop() {
   // nothing happens after setup
 }
 
-void waitip()// wait for user input
-{
+// wait for user input
+void waitip() {
   while (Serial.available() == 0)
   {}
 }
 
-void printDirectory(File dir, int numTabs) // prints directory list
-{
+// prints directory list
+void printDirectory(File dir, int numTabs) {
   while (true) {
 
     File entry =  dir.openNextFile();
