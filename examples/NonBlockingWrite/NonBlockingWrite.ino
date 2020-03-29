@@ -40,9 +40,15 @@ void setup() {
   // set LED pin to output, used to blink when writing
   pinMode(LED_BUILTIN, OUTPUT);
 
+  Serial.print("Initializing SD card...");
+
   // init the SD card
   if (!SD.begin()) {
-    Serial.println("Card failed, or not present");
+    Serial.println("initialization failed. Things to check:");
+    Serial.println("1. is a card inserted?");
+    Serial.println("2. is your wiring correct?");
+    Serial.println("3. did you change the chipSelect pin to match your shield or module?");
+    Serial.println("Note: press reset button on the board and reopen this serial monitor after fixing your issue!");
     // don't do anything more:
     while (1);
   }
