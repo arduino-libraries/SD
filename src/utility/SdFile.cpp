@@ -315,7 +315,7 @@ uint8_t SdFile::make83Name(const char* str, uint8_t* name) {
         }
       #endif
       // check size and only allow ASCII printable characters
-      if (i > n || c < 0X21 || c > 0X7E) {
+      if (i > n || c <= 0X21 || c >= 0X7F) {
         return false;
       }
       // only upper case allowed in 8.3 names - convert lower to upper
