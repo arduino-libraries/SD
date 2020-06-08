@@ -55,6 +55,8 @@ uint8_t const CMD32 = 0X20;
 uint8_t const CMD33 = 0X21;
 /** ERASE - erase all previously selected blocks */
 uint8_t const CMD38 = 0X26;
+/** LOCK_CMD - lock card with password */
+uint8_t const CMD42 = 0x2A; 
 /** APP_CMD - escape for application specific command */
 uint8_t const CMD55 = 0X37;
 /** READ_OCR - read the OCR register of a card */
@@ -82,6 +84,14 @@ uint8_t const WRITE_MULTIPLE_TOKEN = 0XFC;
 uint8_t const DATA_RES_MASK = 0X1F;
 /** write data accepted token */
 uint8_t const DATA_RES_ACCEPTED = 0X05;
+/** mask for setting a card password*/
+uint8_t const SET_CARD_PWD = 0x01;
+/** mask for removing a card password*/
+uint8_t const CLEAR_CARD_PWD = 0x02;
+/** mask for locking or unlocking a card*/
+uint8_t const ACTIVATE_CARD_LOCK = 0x04;
+/** mask to erase the entire card*/
+uint8_t const FORCE_ERASE = 0x08;
 //------------------------------------------------------------------------------
 typedef struct CID {
   // byte 0

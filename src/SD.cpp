@@ -369,6 +369,18 @@ namespace SDLib {
     root.close();
   }
 
+  // protect a card with a password or remove it
+  bool SDClass::lockCard(bool setLock, const char pwd) {
+	  return card.lockCard(setLock, pwd);
+  }
+  
+  // !!CAUTION!! call this to completly erase a card,
+  // this will unlock a card but also delete the complete file system,
+  // reformatting will be required!
+  bool SDClass::forceEraseCard(){
+	  return card.forceEraseCard();
+  }
+
   // this little helper is used to traverse paths
   SdFile SDClass::getParentDir(const char *filepath, int *index) {
     // get parent directory
