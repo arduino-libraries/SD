@@ -4,19 +4,18 @@
   This example shows how use the utility libraries on which the'
   SD library is based in order to get info about your SD card.
   Very useful for testing a card when you're not sure whether its working or not.
-
+  Pin numbers reflect the default SPI pins for Uno and Nano models
   The circuit:
     SD card attached to SPI bus as follows:
- ** MOSI - pin 11 on Arduino Uno/Duemilanove/Diecimila
- ** MISO - pin 12 on Arduino Uno/Duemilanove/Diecimila
+ ** SDO - pin 11 on Arduino Uno/Duemilanove/Diecimila
+ ** SDI - pin 12 on Arduino Uno/Duemilanove/Diecimila
  ** CLK - pin 13 on Arduino Uno/Duemilanove/Diecimila
  ** CS - depends on your SD card shield or module.
- 		Pin 4 used here for consistency with other Arduino examples
-
+ 		Pin 10 used here for consistency with other Arduino examples
 
   created  28 Mar 2011
   by Limor Fried
-  modified 9 Apr 2012
+  modified 24 July 2020
   by Tom Igoe
 */
 // include the SD library:
@@ -29,11 +28,12 @@ SdVolume volume;
 SdFile root;
 
 // change this to match your SD shield or module;
+// Default SPI on Uno and Nano: pin 10
 // Arduino Ethernet shield: pin 4
 // Adafruit SD shields and modules: pin 10
 // Sparkfun SD shield: pin 8
 // MKRZero SD: SDCARD_SS_PIN
-const int chipSelect = 4;
+const int chipSelect = 10;
 
 void setup() {
   // Open serial communications and wait for port to open:
