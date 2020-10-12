@@ -303,19 +303,19 @@ uint8_t SdFile::make83Name(const char* str, uint8_t* name) {
       // illegal FAT characters
       uint8_t b;
       #if defined(__AVR__)
-      PGM_P p = PSTR("|<>^+=?/[];,*\"\\");
+      PGM_P p = PSTR("|<>:+=?/[];,*\"\\");
       while ((b = pgm_read_byte(p++))) if (b == c) {
           return false;
         }
       #elif defined(__arm__)
-      const uint8_t valid[] = "|<>^+=?/[];,*\"\\";
+      const uint8_t valid[] = "|<>:+=?/[];,*\"\\";
       const uint8_t *p = valid;
       while ((b = *p++)) if (b == c) {
           return false;
         }
       #endif
       // check size and only allow ASCII printable characters
-      if (i > n || c < 0X21 || c > 0X7E) {
+      if (i > n || c < 0x20 || c == 0x7F) {
         return false;
       }
       // only upper case allowed in 8.3 names - convert lower to upper
@@ -1041,7 +1041,7 @@ uint8_t SdFile::rmRfStar(void) {
     }
 
     // skip if part of long file name or volume label in root
-    if (!DIR_IS_FILE_OR_SUBDIR(p)) {
+    if (p->attributes & DIR_ATT_VOLUME_ID) {
       continue;
     }
 
