@@ -453,7 +453,7 @@ namespace SDLib {
 
     */
 
-    int pathidx;
+    int pathidx = 0;
 
     // do the interactive search
     SdFile parentdir = getParentDir(filepath, &pathidx);
