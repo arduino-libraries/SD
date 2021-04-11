@@ -6,14 +6,14 @@
   SPI pins for Uno and Nano models
 
   The circuit:
-   analog sensors on analog ins 0, 1, and 2
+   analog sensors on analog pins 0, 1, and 2
    SD card attached to SPI bus as follows:
  ** SDO - pin 11
  ** SDI - pin 12
  ** CLK - pin 13
  ** CS - depends on your SD card shield or module.
  		Pin 10 used here for consistency with other Arduino examples
-    (for MKRZero SD: SDCARD_SS_PIN)
+    (for MKR Zero SD: SDCARD_SS_PIN)
 
   created  24 Nov 2010
   modified  24 July 2020
@@ -41,7 +41,7 @@ void setup() {
     Serial.println("1. is a card inserted?");
     Serial.println("2. is your wiring correct?");
     Serial.println("3. did you change the chipSelect pin to match your shield or module?");
-    Serial.println("Note: press reset or reopen this serial monitor after fixing your issue!");
+    Serial.println("Note: press reset or reopen this Serial Monitor after fixing your issue!");
     while (true);
   }
 
