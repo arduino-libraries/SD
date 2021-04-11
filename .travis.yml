@@ -28,18 +28,6 @@ matrix:
       install:
         - arduino-cli core install arduino:sam
 
-    # check all files for commonly misspelled words
-    - env:
-        - NAME='Spell Check'
-      language: python
-      python: 3.6
-      before_install:
-        # https://github.com/codespell-project/codespell
-        - pip install codespell
-      script:
-        # codespell will ignore any words in extras/codespell-ignore-words-list.txt, which may be used to fix false positives
-        - codespell --skip="${TRAVIS_BUILD_DIR}/.git" --ignore-words="${TRAVIS_BUILD_DIR}/extras/codespell-ignore-words-list.txt" "${TRAVIS_BUILD_DIR}"
-
 # default phases shared by the compilation tests
 before_install:
   - wget http://downloads.arduino.cc/arduino-cli/arduino-cli-$CLI_VERSION-linux64.tar.bz2
