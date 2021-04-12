@@ -8,7 +8,7 @@
  ** SDO - pin 11
  ** SDI - pin 12
  ** CLK - pin 13
- ** CS - pin 4 (For For Uno, Nano: pin 10. For MKRZero SD: SDCARD_SS_PIN)
+ ** CS - pin 4 (For For Uno, Nano: pin 10. For MKR Zero SD: SDCARD_SS_PIN)
 
   created   Nov 2010
   by David A. Mellis
@@ -36,7 +36,7 @@ void setup() {
     Serial.println("1. is a card inserted?");
     Serial.println("2. is your wiring correct?");
     Serial.println("3. did you change the chipSelect pin to match your shield or module?");
-    Serial.println("Note: press reset or reopen this serial monitor after fixing your issue!");
+    Serial.println("Note: press reset or reopen this Serial Monitor after fixing your issue!");
     while (true);
   }
 

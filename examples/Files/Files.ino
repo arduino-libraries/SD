@@ -1,7 +1,7 @@
 /*
   SD card basic file example
 
-  This example shows how to create and destroy an SD card file
+  This example shows how to create and destroy an SD card file.
   The circuit. Pin numbers reflect the default
   SPI pins for Uno and Nano models:
    SD card attached to SPI bus as follows:
@@ -10,7 +10,7 @@
  ** CLK - pin 13
  ** CS - depends on your SD card shield or module.
  		Pin 10 used here for consistency with other Arduino examples
-    (for MKRZero SD: SDCARD_SS_PIN)
+    (for MKR Zero SD: SDCARD_SS_PIN)
 
   created   Nov 2010
   by David A. Mellis
