@@ -587,7 +587,7 @@ namespace SDLib {
 
     //Serial.print("\t\treading dir...");
     while (_file->readDir(&p) > 0) {
-
+      uint16_t index = (_file->curPosition() - sizeof(dir_t) ) >> 5;
       // done if past last used entry
       if (p.name[0] == DIR_NAME_FREE) {
         //Serial.println("end");
@@ -607,14 +607,14 @@ namespace SDLib {
       }
 
       // print file name with possible blank fill
-      SdFile f;
-      char name[13];
-      _file->dirName(p, name);
       //Serial.print("try to open file ");
       //Serial.println(name);
 
-      if (f.open(_file, name, mode)) {
+      SdFile f;
+      if (f.open(_file, index, mode)) {
         //Serial.println("OK!");
+        char name[13];
+        _file->dirName(p, name);
         return File(f, name);
       } else {
         //Serial.println("ugh");

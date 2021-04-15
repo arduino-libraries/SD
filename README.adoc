@@ -10,4 +10,4 @@ image:https://github.com/{repository-owner}/{repository-name}/actions/workflows/
 The SD library allows for reading from and writing to SD cards.
 
 For more information about this library please visit us at
-http://www.arduino.cc/en/Reference/repository-name}
+http://www.arduino.cc/en/Reference/{repository-name}
