@@ -206,6 +206,7 @@ class Sd2Card {
       return init(sckRateID, SD_CHIP_SELECT_PIN);
     }
     uint8_t init(uint8_t sckRateID, uint8_t chipSelectPin);
+    void done();
     void partialBlockRead(uint8_t value);
     /** Returns the current value, true or false, for partial block read. */
     uint8_t partialBlockRead(void) const {
