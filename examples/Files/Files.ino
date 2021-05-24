@@ -32,7 +32,7 @@ while (!Serial);
 
   Serial.print("Initializing SD card...");
 
-  if (!SD.begin(10)) {
+  if (!SD.begin(chipSelect)) {
     Serial.println("initialization failed!");
     while (1);
   }
