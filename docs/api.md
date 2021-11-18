@@ -123,7 +123,7 @@ SD.open(filepath, mode)
 #### Parameters
 
 * `filepath`: the name of the file to open, which can include directories (delimited by forward-slashes, /).
-* `mode` (optional): the mode in which to open the file. Mode can be `FILE_READ` (open the file for reading, starting at the beginning of the file) or `FILE_WRITE` (open the file for reading and writing, starting at the end of the file).
+* `mode` (optional): the mode in which to open the file. Mode can be `FILE_READ` (open the file for reading, starting at the beginning of the file), `FILE_NEW` (open a new empty file for writing) or `FILE_WRITE` (open the file for reading and writing, starting at the end of the file).
 
 #### Returns
 
