@@ -31,10 +31,7 @@
 
 #endif // Sd2PinMap_h
 
-#elif defined(__AVR_ATmega4809__) || defined(__AVR_ATmega4808__) || \
-defined(__AVR_ATmega3209__) || defined(__AVR_ATmega3208__) || \
-defined(__AVR_ATmega1609__) || defined(__AVR_ATmega1608__) || \
-defined(__AVR_ATmega809__) || defined(__AVR_ATmega808__)
+#elif defined(__AVR_ARCH__) && (__AVR_ARCH__ == 102 || __AVR_ARCH__  == 103 || __AVR_ARCH__ == 104)
 
 #ifndef Sd2PinMap_h
   #define Sd2PinMap_h
