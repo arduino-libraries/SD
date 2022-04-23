@@ -669,29 +669,29 @@ void loop() {
 }
 
 void printDirectory(File dir, int numTabs) {
-   while(true) {
+  while (true) {
 
-     File entry =  dir.openNextFile();
-     if (! entry) {
-       // No more files
-       // Serial.println("**nomorefiles**");
-       break;
-     }
+    File entry = dir.openNextFile();
+    if (!entry) {
+      // No more files
+      // Serial.println("**nomorefiles**");
+      break;
+    }
 
-     for (uint8_t i=0; i<numTabs; i++) {
-       Serial.print('\t');
-     }
+    for (uint8_t i = 0; i < numTabs; i++) {
+      Serial.print('\t');
+    }
 
-     Serial.print(entry.name());
-     if (entry.isDirectory()) {
-       Serial.println("/");
-       printDirectory(entry, numTabs+1);
-     } else {
-       // Files have sizes, directories do not
-       Serial.print("\t\t");
-       Serial.println(entry.size(), DEC);
-     }
-   }
+    Serial.print(entry.name());
+    if (entry.isDirectory()) {
+      Serial.println("/");
+      printDirectory(entry, numTabs + 1);
+    } else {
+      // Files have sizes, directories do not
+      Serial.print("\t\t");
+      Serial.println(entry.size(), DEC);
+    }
+  }
 }
 ```
 
@@ -745,7 +745,7 @@ void setup() {
   delay(2000);
 
   Serial.println();
-  Serial.println("Rewinding, and repeating below:" );
+  Serial.println("Rewinding, and repeating below:");
   Serial.println();
   delay(2000);
 
@@ -761,7 +761,7 @@ void loop() {
 void printDirectory(File dir, int numTabs) {
   while (true) {
     File entry = dir.openNextFile();
-    if (! entry) {
+    if (!entry) {
       if (numTabs == 0)
         Serial.println("** Done **");
       return;
@@ -841,29 +841,29 @@ void loop() {
 }
 
 void printDirectory(File dir, int numTabs) {
-   while(true) {
-     File entry =  dir.openNextFile();
-     if (! entry) {
-       // No more files
-       // Return to the first file in the directory
-       dir.rewindDirectory();
-       break;
-     }
+  while (true) {
+    File entry = dir.openNextFile();
+    if (!entry) {
+      // No more files
+      // Return to the first file in the directory
+      dir.rewindDirectory();
+      break;
+    }
 
-     for (uint8_t i=0; i<numTabs; i++) {
-       Serial.print('\t');
-     }
+    for (uint8_t i = 0; i < numTabs; i++) {
+      Serial.print('\t');
+    }
 
-     Serial.print(entry.name());
-     if (entry.isDirectory()) {
-       Serial.println("/");
-       printDirectory(entry, numTabs+1);
-     } else {
-       // Files have sizes, directories do not
-       Serial.print("\t\t");
-       Serial.println(entry.size(), DEC);
-     }
-   }
+    Serial.print(entry.name());
+    if (entry.isDirectory()) {
+      Serial.println("/");
+      printDirectory(entry, numTabs + 1);
+    } else {
+      // Files have sizes, directories do not
+      Serial.print("\t\t");
+      Serial.println(entry.size(), DEC);
+    }
+  }
 }
 ```
 
