@@ -833,7 +833,13 @@ void setup() {
   SD.begin(10);
   root = SD.open("/");
   printDirectory(root, 0);
+  Serial.println();
+
+  Serial.println("PRINT AGAIN");
+  Serial.println("-----------");
   root.rewindDirectory();  // Return to the first file in the directory
+  printDirectory(root, 0);
+
   Serial.println("Done!");
 }
 
