@@ -833,6 +833,13 @@ void setup() {
   SD.begin(10);
   root = SD.open("/");
   printDirectory(root, 0);
+  Serial.println();
+
+  Serial.println("PRINT AGAIN");
+  Serial.println("-----------");
+  root.rewindDirectory();  // Return to the first file in the directory
+  printDirectory(root, 0);
+
   Serial.println("Done!");
 }
 
@@ -845,8 +852,6 @@ void printDirectory(File dir, int numTabs) {
     File entry = dir.openNextFile();
     if (!entry) {
       // No more files
-      // Return to the first file in the directory
-      dir.rewindDirectory();
       break;
     }
 
