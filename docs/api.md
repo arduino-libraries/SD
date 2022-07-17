@@ -451,7 +451,7 @@ Print data, followed by a carriage return and newline, to the File, which must h
 ```
 file.println()
 file.println(data)
-file.print(data, BASE)
+file.println(data, BASE)
 ```
 
 #### Parameters
