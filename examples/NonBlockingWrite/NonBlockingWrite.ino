@@ -24,7 +24,7 @@
  ** CLK - pin 13
  ** CS - depends on your SD card shield or module.
     Pin 10 used here for consistency with other Arduino examples
-    (for MKRZero SD: SDCARD_SS_PIN)
+    (for MKR Zero SD: SDCARD_SS_PIN)
 
     modified 24 July 2020
     by Tom Igoe
@@ -48,7 +48,7 @@ unsigned long lastMillis = 0;
 void setup() {
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
-  // reserve 1kB for String used as a dataBuffer
+  // reserve 1 kB for String used as a dataBuffer
   dataBuffer.reserve(1024);
 
   // set LED pin to output, used to blink when writing
@@ -64,7 +64,7 @@ void setup() {
     Serial.println("1. is a card inserted?");
     Serial.println("2. is your wiring correct?");
     Serial.println("3. did you change the chipSelect pin to match your shield or module?");
-    Serial.println("Note: press reset or reopen this serial monitor after fixing your issue!");
+    Serial.println("Note: press reset button on the board and reopen this Serial Monitor after fixing your issue!");
     while (true);
   }
 

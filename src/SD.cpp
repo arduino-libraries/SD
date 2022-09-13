@@ -54,9 +54,11 @@
 
 namespace SDLib {
 
-  // Used by `getNextPathComponent`
-#define MAX_COMPONENT_LEN 12 // What is max length?
-#define PATH_COMPONENT_BUFFER_LEN MAX_COMPONENT_LEN+1
+// Used by `getNextPathComponent`
+#define MAX_COMPONENT_LEN 12
+#define PATH_COMPONENT_BUFFER_LEN (MAX_COMPONENT_LEN + 1)
+// BASENAME:char(8) + '.':char(1) + EXT:char(3) = 12 (a.k.a short 8.3 name)
+// And an extra space for '\0' for path buffer
 
   bool getNextPathComponent(const char *path, unsigned int *p_offset,
                             char *buffer) {

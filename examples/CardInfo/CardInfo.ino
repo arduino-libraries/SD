@@ -1,10 +1,10 @@
 /*
   SD card test
 
-  This example shows how use the utility libraries on which the'
+  This example shows how use the utility libraries on which the
   SD library is based in order to get info about your SD card.
   Very useful for testing a card when you're not sure whether its working or not.
-  Pin numbers reflect the default SPI pins for Uno and Nano models
+  Pin numbers reflect the default SPI pins for Uno and Nano models.
   The circuit:
     SD card attached to SPI bus as follows:
  ** SDO - pin 11 on Arduino Uno/Duemilanove/Diecimila
@@ -32,7 +32,7 @@ SdFile root;
 // Arduino Ethernet shield: pin 4
 // Adafruit SD shields and modules: pin 10
 // Sparkfun SD shield: pin 8
-// MKRZero SD: SDCARD_SS_PIN
+// MKR Zero SD: SDCARD_SS_PIN
 const int chipSelect = 10;
 
 void setup() {
@@ -52,6 +52,7 @@ void setup() {
     Serial.println("* is a card inserted?");
     Serial.println("* is your wiring correct?");
     Serial.println("* did you change the chipSelect pin to match your shield or module?");
+    Serial.println("Note: press reset button on the board and reopen this Serial Monitor after fixing your issue!");
     while (1);
   } else {
     Serial.println("Wiring is correct and a card is present.");
@@ -96,13 +97,13 @@ void setup() {
 
   volumesize = volume.blocksPerCluster();    // clusters are collections of blocks
   volumesize *= volume.clusterCount();       // we'll have a lot of clusters
-  volumesize /= 2;                           // SD card blocks are always 512 bytes (2 blocks are 1KB)
-  Serial.print("Volume size (Kb):  ");
+  volumesize /= 2;                           // SD card blocks are always 512 bytes (2 blocks are 1 KB)
+  Serial.print("Volume size (KB):  ");
   Serial.println(volumesize);
-  Serial.print("Volume size (Mb):  ");
+  Serial.print("Volume size (MB):  ");
   volumesize /= 1024;
   Serial.println(volumesize);
-  Serial.print("Volume size (Gb):  ");
+  Serial.print("Volume size (GB):  ");
   Serial.println((float)volumesize / 1024.0);
 
   Serial.println("\nFiles found on the card (name, date and size in bytes): ");
