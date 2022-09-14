@@ -616,7 +616,8 @@ namespace SDLib {
       //Serial.print("try to open file ");
       //Serial.println(name);
 
-      if (f.open(_file, name, mode)) {
+      uint16_t index = _file->curPosition() / sizeof(dir_t) - 1;
+      if (f.open(_file, index, mode)) {
         //Serial.println("OK!");
         return File(f, name);
       } else {
