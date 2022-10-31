@@ -331,6 +331,24 @@ uint8_t Sd2Card::init(uint8_t sckRateID, uint8_t chipSelectPin) {
       goto fail;
     }
   }
+
+  uint8_t status_ext;
+  status_ = cardCommand(CMD13, 0);
+  status_ext = spiRec();
+  if ( status_ ) {
+    error(SD_CARD_ERROR_SEND_STATUS);
+    goto fail;
+  } else {
+    if (status_ext) {
+      if ( status_ext | 0X01 ) {
+        error(SD_CARD_ERROR_LOCKED);
+      } else {
+        error(SD_CARD_ERROR_SEND_STATUS);
+      }
+      goto fail;
+    }
+  }
+
   // if SD2 read OCR register to check for SDHC card
   if (type() == SD_CARD_TYPE_SD2) {
     if (cardCommand(CMD58, 0)) {
@@ -761,6 +779,93 @@ fail:
   error(SD_CARD_ERROR_STOP_TRAN);
   chipSelectHigh();
   return false;
+}
+//------------------------------------------------------------------------------
+/** lock or unlock SD card by password
+ *
+ * \param[in] pwd si the pointer to passowrd buffer
+ * \return The value one, true, is returned for success and
+ * the value zero, false, is returned for failure.
+ * 
+ */
+uint8_t Sd2Card::lockUnlockCard(uint8_t flags, int pass_len, uint8_t* pwd) {
+
+
+  // select card
+  chipSelectLow();
+
+  // set block length
+  if ( cardCommand(CMD16, 18) ) {
+    error(SD_CARD_ERROR_CMD16);
+    goto fail;
+  }
+
+
+  // send the command
+  if (cardCommand(CMD42, 0)) {
+    error(SD_CARD_ERROR_CMD42);
+    goto fail;
+  }
+  
+  spiSend( 0xFE ); // Start Token
+  spiSend( flags ); // 4-zeros ERASE LOCK_UNLOCK CLR_PWD SET_PWD
+  spiSend( pass_len );     // password length
+  
+  // send password
+  for ( uint16_t i=0; i<pass_len; i++ ) {
+      spiSend( pwd[i] );
+  }
+
+/*
+  //send fake CRC
+  spiSend(0xFF);
+  spiSend(0xFF);
+*/
+
+  // wait for response
+  do {
+    status_ = spiRec();
+  } while ( status_ == 0xFF );
+
+/*
+  for (uint8_t i = 0; ((status_ = spiRec()) & 0x10) && i != 0xFF; i++) {
+    Serial.println( status_, HEX );
+  }
+*/
+
+  // wait for not busy
+//  for (uint16_t i = 0; ( ~spiRec() ) && i != 0xFFFF; i++);
+  uint8_t st;
+  do {
+    st = spiRec();
+  } while ( st != 0xFF );
+/*
+  if ( status_ != 0x05 ) {
+    error(0x88);
+    goto fail;
+  }
+*/
+  status_ = cardCommand(CMD13, 0);
+  uint8_t status_ext;
+  status_ext = spiRec();
+  if ( status_ ) { 
+    goto fail;
+    error(0x89);
+  } else {
+    if ( status_ext ) {
+      status_ = status_ext;
+      error(0x8A);
+      goto fail;
+    }
+  }
+
+  chipSelectHigh();
+  return true;
+
+fail:
+  chipSelectHigh();
+  return false;
+  
 }
 //------------------------------------------------------------------------------
 /** Check if the SD card is busy
