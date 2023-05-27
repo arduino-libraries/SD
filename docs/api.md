@@ -571,11 +571,11 @@ file.read(buf, len)
 
 #### Returns
 
-When used as `file.read()`
+When used as `file.read()`:
 The next byte (or character), or -1 if none is available. 
 
-When used as `file.read(buf, len)`
-The amount of bytes read, or -1 if an error occured.
+When used as `file.read(buf, len)`:
+The amount of bytes read, or -1 if an error occurred.
 
 #### See also
 
