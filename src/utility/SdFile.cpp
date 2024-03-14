@@ -293,9 +293,9 @@ void SdFile::ls(uint8_t flags, uint8_t indent, HardwareSerial *port)
     // print modify date/time if requested
     if (flags & LS_DATE)
     {
-      printFatDate(p->lastWriteDate);
+      printFatDate(p->lastWriteDate, port);
       port->print(' ');
-      printFatTime(p->lastWriteTime);
+      printFatTime(p->lastWriteTime, port);
     }
     // print size if requested
     if (!DIR_IS_SUBDIR(p) && (flags & LS_SIZE))
