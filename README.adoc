@@ -11,3 +11,6 @@ The SD library allows for reading from and writing to SD cards.
 
 For more information about this library please visit us at
 http://www.arduino.cc/en/Reference/{repository-name}
+
+Added patch to adapt library for TFT shield on Arduino Mega. Description of the changes at
+https://www.aranacorp.com/fr/utilisation-du-module-sd-du-shield-tft-avec-arduino-mega/
