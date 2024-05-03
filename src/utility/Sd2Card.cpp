@@ -783,7 +783,7 @@ fail:
 //------------------------------------------------------------------------------
 /** lock or unlock SD card by password
  *
- * \param[in] pwd si the pointer to passowrd buffer
+ * \param[in] pwd si the pointer to password buffer
  * \return The value one, true, is returned for success and
  * the value zero, false, is returned for failure.
  * 
@@ -816,35 +816,16 @@ uint8_t Sd2Card::lockUnlockCard(uint8_t flags, int pass_len, uint8_t* pwd) {
       spiSend( pwd[i] );
   }
 
-/*
-  //send fake CRC
-  spiSend(0xFF);
-  spiSend(0xFF);
-*/
-
   // wait for response
   do {
     status_ = spiRec();
   } while ( status_ == 0xFF );
 
-/*
-  for (uint8_t i = 0; ((status_ = spiRec()) & 0x10) && i != 0xFF; i++) {
-    Serial.println( status_, HEX );
-  }
-*/
-
-  // wait for not busy
-//  for (uint16_t i = 0; ( ~spiRec() ) && i != 0xFFFF; i++);
   uint8_t st;
   do {
     st = spiRec();
   } while ( st != 0xFF );
-/*
-  if ( status_ != 0x05 ) {
-    error(0x88);
-    goto fail;
-  }
-*/
+
   status_ = cardCommand(CMD13, 0);
   uint8_t status_ext;
   status_ext = spiRec();
