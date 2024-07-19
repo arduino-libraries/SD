@@ -1,5 +1,5 @@
-:repository-owner: arduino-libraries
-:repository-name: SD
+:repository-owner: ADLINK
+:repository-name: SD-samd5x
 
 = {repository-name} Library for Arduino =
 
@@ -7,7 +7,7 @@ image:https://github.com/{repository-owner}/{repository-name}/actions/workflows/
 image:https://github.com/{repository-owner}/{repository-name}/actions/workflows/compile-examples.yml/badge.svg["Compile Examples status", link="https://github.com/{repository-owner}/{repository-name}/actions/workflows/compile-examples.yml"]
 image:https://github.com/{repository-owner}/{repository-name}/actions/workflows/spell-check.yml/badge.svg["Spell Check status", link="https://github.com/{repository-owner}/{repository-name}/actions/workflows/spell-check.yml"]
 
-The SD library allows for reading from and writing to SD cards.
+The SD-samd5x library allows for reading from and writing to SD cards using the SDHC peripheral on samd5x chips. It aims to follow the API of the original SD library as closely as possible.
 
 For more information about this library please visit us at
 http://www.arduino.cc/en/Reference/{repository-name}
