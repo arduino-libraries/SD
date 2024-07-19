@@ -336,9 +336,11 @@ namespace SDLib {
 
   /* Implementation of class used to create `SDCard` object. */
 
+  bool SDClass::begin(void) {
+    return SDClass::begin(false);
+  }
 
-
-  bool SDClass::begin(uint8_t csPin) {
+  bool SDClass::begin(bool high_speed) {
     if (root.isOpen()) {
       root.close();
     }
@@ -350,18 +352,17 @@ namespace SDLib {
       Return true if initialization succeeds, false otherwise.
 
     */
-    return card.init(SPI_HALF_SPEED, csPin) &&
+    return card.init(high_speed) &&
            volume.init(card) &&
            root.openRoot(volume);
   }
 
-  bool SDClass::begin(uint32_t clock, uint8_t csPin) {
+  bool SDClass::begin(block_device_t dev) {
     if (root.isOpen()) {
       root.close();
     }
 
-    return card.init(SPI_HALF_SPEED, csPin) &&
-           card.setSpiClock(clock) &&
+    return card.init(dev) &&
            volume.init(card) &&
            root.openRoot(volume);
   }

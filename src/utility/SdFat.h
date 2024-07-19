@@ -23,9 +23,6 @@
    \file
    SdFile and SdVolume classes
 */
-#if defined (__AVR__) || defined (__CPU_ARC__)
-  #include <avr/pgmspace.h>
-#endif
 #include "Sd2Card.h"
 #include "FatStructs.h"
 #include <Print.h>
@@ -56,11 +53,12 @@ class SdVolume;
 
 // flags for ls()
 /** ls() flag to print modify date */
-uint8_t const LS_DATE = 1;
+//uint8_t const LS_DATE = 1;
+uint8_t const LS_DATE2 = 1;
 /** ls() flag to print file size */
-uint8_t const LS_SIZE = 2;
+uint8_t const LS_SIZE2 = 2;
 /** ls() flag for recursive list of subdirectories */
-uint8_t const LS_R = 4;
+uint8_t const LS_R2 = 4;
 
 // use the gnu style oflag in open()
 /** open() oflag for reading */
@@ -88,11 +86,11 @@ uint8_t const O_TRUNC = 0X40;
 
 // flags for timestamp
 /** set the file's last access date */
-uint8_t const T_ACCESS = 1;
+uint8_t const T_ACCESS2 = 1;
 /** set the file's creation date and time */
-uint8_t const T_CREATE = 2;
+uint8_t const T_CREATE2 = 2;
 /** Set the file's write date and time */
-uint8_t const T_WRITE = 4;
+uint8_t const T_WRITE2 = 4;
 // values for type_
 /** This SdFile has not been opened. */
 uint8_t const FAT_FILE_TYPE_CLOSED = 0;
@@ -108,35 +106,35 @@ uint8_t const FAT_FILE_TYPE_SUBDIR = 4;
 uint8_t const FAT_FILE_TYPE_MIN_DIR = FAT_FILE_TYPE_ROOT16;
 
 /** date field for FAT directory entry */
-static inline uint16_t FAT_DATE(uint16_t year, uint8_t month, uint8_t day) {
+static inline uint16_t FAT_DATE2(uint16_t year, uint8_t month, uint8_t day) {
   return (year - 1980) << 9 | month << 5 | day;
 }
 /** year part of FAT directory date field */
-static inline uint16_t FAT_YEAR(uint16_t fatDate) {
+static inline uint16_t FAT_YEAR2(uint16_t fatDate) {
   return 1980 + (fatDate >> 9);
 }
 /** month part of FAT directory date field */
-static inline uint8_t FAT_MONTH(uint16_t fatDate) {
+static inline uint8_t FAT_MONTH2(uint16_t fatDate) {
   return (fatDate >> 5) & 0XF;
 }
 /** day part of FAT directory date field */
-static inline uint8_t FAT_DAY(uint16_t fatDate) {
+static inline uint8_t FAT_DAY2(uint16_t fatDate) {
   return fatDate & 0X1F;
 }
 /** time field for FAT directory entry */
-static inline uint16_t FAT_TIME(uint8_t hour, uint8_t minute, uint8_t second) {
+static inline uint16_t FAT_TIME2(uint8_t hour, uint8_t minute, uint8_t second) {
   return hour << 11 | minute << 5 | second >> 1;
 }
 /** hour part of FAT directory time field */
-static inline uint8_t FAT_HOUR(uint16_t fatTime) {
+static inline uint8_t FAT_HOUR2(uint16_t fatTime) {
   return fatTime >> 11;
 }
 /** minute part of FAT directory time field */
-static inline uint8_t FAT_MINUTE(uint16_t fatTime) {
+static inline uint8_t FAT_MINUTE2(uint16_t fatTime) {
   return (fatTime >> 5) & 0X3F;
 }
 /** second part of FAT directory time field */
-static inline uint8_t FAT_SECOND(uint16_t fatTime) {
+static inline uint8_t FAT_SECOND2(uint16_t fatTime) {
   return 2 * (fatTime & 0X1F);
 }
 /** Default date for file timestamps is 1 Jan 2000 */
@@ -330,10 +328,6 @@ class SdFile : public Print {
     size_t write(uint8_t b);
     size_t write(const void* buf, uint16_t nbyte);
     size_t write(const char* str);
-    #ifdef __AVR__
-    void write_P(PGM_P str);
-    void writeln_P(PGM_P str);
-    #endif
     int availableForWrite(void);
     //------------------------------------------------------------------------------
     #if ALLOW_DEPRECATED_FUNCTIONS

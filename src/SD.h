@@ -17,8 +17,10 @@
 
 #include <Arduino.h>
 
+//#include "utility/SdFat.h"
 #include "utility/SdFat.h"
 #include "utility/SdFatUtil.h"
+#include "sd_block_device.h"
 
 #define FILE_READ O_READ
 #define FILE_WRITE (O_READ | O_WRITE | O_CREAT | O_APPEND)
@@ -47,6 +49,7 @@ namespace SDLib {
       void close();
       operator bool();
       char * name();
+      SdFile * getFile();
 
       bool isDirectory(void);
       File openNextFile(uint8_t mode = O_RDONLY);
@@ -68,8 +71,9 @@ namespace SDLib {
     public:
       // This needs to be called to set up the connection to the SD card
       // before other methods are used.
-      bool begin(uint8_t csPin = SD_CHIP_SELECT_PIN);
-      bool begin(uint32_t clock, uint8_t csPin);
+      bool begin();
+      bool begin(bool high_speed);
+      bool begin(block_device_t dev);
 
       //call this when a card is removed. It will allow you to insert and initialise a new card.
       void end();
@@ -131,7 +135,7 @@ using namespace SDLib;
 
 // This allows sketches to use SDLib::File with other libraries (in the
 // sketch you must use SDFile instead of File to disambiguate)
-typedef SDLib::File    SDFile;
+typedef SDLib::File    SDFile2;
 typedef SDLib::SDClass SDFileSystemClass;
 #define SDFileSystem   SDLib::SD
 

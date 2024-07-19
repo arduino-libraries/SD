@@ -18,9 +18,6 @@
    <http://www.gnu.org/licenses/>.
 */
 #include "SdFat.h"
-#ifdef __AVR__
-  #include <avr/pgmspace.h>
-#endif
 #include <Arduino.h>
 //------------------------------------------------------------------------------
 // callback function for date/time
@@ -255,23 +252,23 @@ void SdFile::ls(uint8_t flags, uint8_t indent) {
     }
 
     // print file name with possible blank fill
-    printDirName(*p, flags & (LS_DATE | LS_SIZE) ? 14 : 0);
+    printDirName(*p, flags & (LS_DATE2 | LS_SIZE2) ? 14 : 0);
 
     // print modify date/time if requested
-    if (flags & LS_DATE) {
+    if (flags & LS_DATE2) {
       printFatDate(p->lastWriteDate);
       Serial.print(' ');
       printFatTime(p->lastWriteTime);
     }
     // print size if requested
-    if (!DIR_IS_SUBDIR(p) && (flags & LS_SIZE)) {
+    if (!DIR_IS_SUBDIR(p) && (flags & LS_SIZE2)) {
       Serial.print(' ');
       Serial.print(p->fileSize);
     }
     Serial.println();
 
     // list subdirectory content if requested
-    if ((flags & LS_R) && DIR_IS_SUBDIR(p)) {
+    if ((flags & LS_R2) && DIR_IS_SUBDIR(p)) {
       uint16_t index = curPosition() / 32 - 1;
       SdFile s;
       if (s.open(this, index, O_READ)) {
@@ -302,18 +299,11 @@ uint8_t SdFile::make83Name(const char* str, uint8_t* name) {
     } else {
       // illegal FAT characters
       uint8_t b;
-      #if defined(__AVR__)
-      PGM_P p = PSTR("|<>^+=?/[];,*\"\\");
-      while ((b = pgm_read_byte(p++))) if (b == c) {
-          return false;
-        }
-      #elif defined(__arm__)
       const uint8_t valid[] = "|<>^+=?/[];,*\"\\";
       const uint8_t *p = valid;
       while ((b = *p++)) if (b == c) {
-          return false;
-        }
-      #endif
+        return false;
+      }
       // check size and only allow ASCII printable characters
       if (i > n || c < 0X21 || c > 0X7E) {
         return false;
@@ -719,11 +709,11 @@ void SdFile::printDirName(const dir_t& dir, uint8_t width) {
    \param[in] fatDate The date field from a directory entry.
 */
 void SdFile::printFatDate(uint16_t fatDate) {
-  Serial.print(FAT_YEAR(fatDate));
+  Serial.print(FAT_YEAR2(fatDate));
   Serial.print('-');
-  printTwoDigits(FAT_MONTH(fatDate));
+  printTwoDigits(FAT_MONTH2(fatDate));
   Serial.print('-');
-  printTwoDigits(FAT_DAY(fatDate));
+  printTwoDigits(FAT_DAY2(fatDate));
 }
 //------------------------------------------------------------------------------
 /** %Print a directory time field to Serial.
@@ -733,11 +723,11 @@ void SdFile::printFatDate(uint16_t fatDate) {
    \param[in] fatTime The time field from a directory entry.
 */
 void SdFile::printFatTime(uint16_t fatTime) {
-  printTwoDigits(FAT_HOUR(fatTime));
+  printTwoDigits(FAT_HOUR2(fatTime));
   Serial.print(':');
-  printTwoDigits(FAT_MINUTE(fatTime));
+  printTwoDigits(FAT_MINUTE2(fatTime));
   Serial.print(':');
-  printTwoDigits(FAT_SECOND(fatTime));
+  printTwoDigits(FAT_SECOND2(fatTime));
 }
 //------------------------------------------------------------------------------
 /** %Print a value as two digits to Serial.
@@ -1219,18 +1209,18 @@ uint8_t SdFile::timestamp(uint8_t flags, uint16_t year, uint8_t month,
     return false;
   }
 
-  uint16_t dirDate = FAT_DATE(year, month, day);
-  uint16_t dirTime = FAT_TIME(hour, minute, second);
-  if (flags & T_ACCESS) {
+  uint16_t dirDate = FAT_DATE2(year, month, day);
+  uint16_t dirTime = FAT_TIME2(hour, minute, second);
+  if (flags & T_ACCESS2) {
     d->lastAccessDate = dirDate;
   }
-  if (flags & T_CREATE) {
+  if (flags & T_CREATE2) {
     d->creationDate = dirDate;
     d->creationTime = dirTime;
     // seems to be units of 1/100 second not 1/10 as Microsoft states
     d->creationTimeTenths = second & 1 ? 100 : 0;
   }
-  if (flags & T_WRITE) {
+  if (flags & T_WRITE2) {
     d->lastWriteDate = dirDate;
     d->lastWriteTime = dirTime;
   }
@@ -1460,29 +1450,6 @@ size_t SdFile::write(uint8_t b) {
 size_t SdFile::write(const char* str) {
   return write(str, strlen(str));
 }
-#ifdef __AVR__
-//------------------------------------------------------------------------------
-/**
-   Write a PROGMEM string to a file.
-
-   Use SdFile::writeError to check for errors.
-*/
-void SdFile::write_P(PGM_P str) {
-  for (uint8_t c; (c = pgm_read_byte(str)); str++) {
-    write(c);
-  }
-}
-//------------------------------------------------------------------------------
-/**
-   Write a PROGMEM string followed by CR/LF to a file.
-
-   Use SdFile::writeError to check for errors.
-*/
-void SdFile::writeln_P(PGM_P str) {
-  write_P(str);
-  println();
-}
-#endif
 //------------------------------------------------------------------------------
 /**
    Check how many bytes can be written without blocking.

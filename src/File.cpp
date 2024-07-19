@@ -48,6 +48,10 @@ char *File::name(void) {
   return _name;
 }
 
+SdFile *File::getFile() {
+  return _file;
+}
+
 // a directory is a special type of file
 bool File::isDirectory(void) {
   return (_file && _file->isDir());
