@@ -523,6 +523,22 @@ void fastDigitalWrite(uint8_t pin, uint8_t value) {
 
 #endif	// Arduino ARC
 
+//------------------------------------------------------------------------------
+#elif defined (__RISC_V__)
+
+#if defined (__ELBEAR_ACE_UNO__) // board for MIK32 АМУР from ELRON.TECH
+
+#include <Arduino.h>
+
+// SPI port
+uint8_t const SS_PIN = SS;
+uint8_t const MOSI_PIN = MOSI;
+uint8_t const MISO_PIN = MISO;
+uint8_t const SCK_PIN = SCK;  
+
+#endif	// ELBEAR ACE-UNO
+//------------------------------------------------------------------------------
+
 #else
 #error Architecture or board not supported.
 #endif
