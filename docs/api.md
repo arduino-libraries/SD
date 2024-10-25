@@ -57,32 +57,6 @@ SD.exists(filename)
 * [remove()](#remove)
 * [rmdir()](#rmdir)
 
-### `exists()`
-
-Tests whether a file or directory exists on the SD card.
-
-#### Syntax 
-
-```
-SD.exists(filename)
-```
-
-#### Parameters
-
-* `filename`: the name of the file to test for existence, which can include directories (delimited by forward-slashes, /).
-
-#### Returns
-
-1 if the file or directory exists, 0 if not.
-
-#### See also
-
-* [begin()](#begin)
-* [mkdir()](#mkdir)
-* [open()](#open)
-* [remove()](#remove)
-* [rmdir()](#rmdir)
-
 ### `mkdir()`
 
 Create a directory on the SD card. This will also create any intermediate directories that don't already exists; e.g. `SD.mkdir("a/b/c")` will create a, b, and c.
