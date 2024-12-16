@@ -371,14 +371,23 @@ namespace SDLib {
 
   @return Returns the volume size in kB of the first volume/partition
   */
-  uint32_t SDClass::getvolumesize()
+  uint32_t SDClass::getVolumeSize()
   {
     uint32_t volumesize = volume.blocksPerCluster();    // clusters are collections of blocks
-  volumesize *= volume.clusterCount();       // we'll have a lot of clusters
-  volumesize /= 2;
+    volumesize *= volume.clusterCount();       // we'll have a lot of clusters
+    volumesize /= 2;
     return (volumesize); //2 blocks make 1kB
   }
-  
+
+  /**
+  Get card type
+  @return 0:none, 1:SDv1, 2:SDv2, 3:SDHC   
+  */
+  uint8_t SDClass::getCardType()
+  {
+    return card.type(); 
+  }
+    
   //call this when a card is removed. It will allow you to insert and initialise a new card.
   void SDClass::end() {
     root.close();
