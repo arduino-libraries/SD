@@ -12,7 +12,7 @@
 
 */
 
-#include <SD.h>
+#include "SD.h"
 
 /* for debugging file open/close leaks
    uint8_t nfilecount=0;
