@@ -26,6 +26,8 @@
 #include <SPI.h>
 #include <SD.h>
 
+using namespace SDLib;
+
 const int chipSelect = 10;
 
 void setup() {

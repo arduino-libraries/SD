@@ -126,8 +126,6 @@ namespace SDLib {
 // We enclose File and SD classes in namespace SDLib to avoid conflicts
 // with others legacy libraries that redefines File class.
 
-// This ensure compatibility with sketches that uses only SD library
-using namespace SDLib;
 
 // This allows sketches to use SDLib::File with other libraries (in the
 // sketch you must use SDFile instead of File to disambiguate)

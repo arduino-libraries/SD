@@ -18,6 +18,8 @@
    uint8_t nfilecount=0;
 */
 
+using namespace SDLib;
+
 File::File(SdFile f, const char *n) {
   // oh man you are kidding me, new() doesn't exist? Ok we do it by hand!
   _file = (SdFile *)malloc(sizeof(SdFile));

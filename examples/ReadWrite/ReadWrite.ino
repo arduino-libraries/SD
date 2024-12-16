@@ -20,6 +20,8 @@
 */
 #include <SD.h>
 
+using namespace SDLib;
+
 const int chipSelect = 10;
 File myFile;
 

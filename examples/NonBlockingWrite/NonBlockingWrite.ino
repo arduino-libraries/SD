@@ -33,6 +33,8 @@
 */
 #include <SD.h>
 
+using namespace SDLib;
+
 const int chipSelect = 10;
 
 // file name to use for writing
