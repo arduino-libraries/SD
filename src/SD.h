@@ -106,6 +106,8 @@ namespace SDLib {
         return rmdir(filepath.c_str());
       }
 
+      uint32_t getvolumesize();
+
     private:
 
       // This is used to determine the mode used to open a file

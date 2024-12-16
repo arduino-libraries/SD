@@ -50,7 +50,7 @@
 
 */
 
-#include "SD.h"
+#include <SD.h>
 
 namespace SDLib {
 
@@ -366,6 +366,19 @@ namespace SDLib {
            root.openRoot(volume);
   }
 
+  /**
+  Get information about the volume size
+
+  @return Returns the volume size in kB of the first volume/partition
+  */
+  uint32_t SDClass::getvolumesize()
+  {
+    uint32_t volumesize = volume.blocksPerCluster();    // clusters are collections of blocks
+  volumesize *= volume.clusterCount();       // we'll have a lot of clusters
+  volumesize /= 2;
+    return (volumesize); //2 blocks make 1kB
+  }
+  
   //call this when a card is removed. It will allow you to insert and initialise a new card.
   void SDClass::end() {
     root.close();
