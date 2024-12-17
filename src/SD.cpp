@@ -656,6 +656,6 @@ namespace SDLib {
     }
   }
 
-  SDClass SDSDcard;
+  SDClass SD;
 
 };
