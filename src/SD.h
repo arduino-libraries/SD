@@ -123,7 +123,7 @@ namespace SDLib {
       friend bool callback_openPath(SdFile&, const char *, bool, void *);
   };
 
-  extern SDClass SD;
+  extern SDClass SDcard;
 
 };
 
@@ -135,6 +135,6 @@ namespace SDLib {
 // sketch you must use SDFile instead of File to disambiguate)
 typedef SDLib::File    SDFile;
 typedef SDLib::SDClass SDFileSystemClass;
-#define SDFileSystem   SDLib::SD
+#define SD   SDLib::SDcard
 
 #endif
