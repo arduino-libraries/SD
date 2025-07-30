@@ -780,79 +780,78 @@ uint8_t Sd2Card::isBusy(void) {
   \param[in] setLock true if the card should be locked, false if it should be unlocked
   \param[in] pwd password to lock/unlock the card
   
-	\return true if the locking was successful
+  \return true if the locking was successful
 */
 bool Sd2Card::lockCard(bool setLock, const char *pwd){
-	if(!isBusy()){
-		int16_t i;
-		uint8_t pwd_len = sizeof(pwd);
-		bool locked = false;
-		
-		if(cardCommand(CMD42, 0) != 0){
-			return false;
-		}
-		
-		spiSend(DATA_START_BLOCK);
-		if(setLock) {
-			spiSend(SET_CARD_PWD & 0x07);
-		}
-		else{
-			spiSend(CLEAR_CARD_PWD & 0x07);
-		}
-		
-		spiSend(pwd_len);
-		for(i=0; i<512; i++){
-			if(i<pwd_len){
-				spiSend(pwd[i]);
-			}
-			else{
-				spiSend(0xFF);
-			}
-		}
-		
-		locked = getCardStatus();
-		
-		spiSend(0xFF);
-		spiSend(0xFF);
-		
-		i = 0xFFFF;
-		while(isBusy() && (--i));
-		
-		return locked;
-	}
+  if(!isBusy()){
+    int16_t i;
+    uint8_t pwd_len = sizeof(pwd);
+    bool locked = false;
+
+    if(cardCommand(CMD42, 0) != 0){
+      return false;
+    }
+
+    spiSend(DATA_START_BLOCK);
+    if(setLock) {
+      spiSend(SET_CARD_PWD & 0x07);
+    }
+    else{
+      spiSend(CLEAR_CARD_PWD & 0x07);
+    }
+
+    spiSend(pwd_len);
+    for(i=0; i<512; i++){
+      if(i<pwd_len){
+        spiSend(pwd[i]);
+      }
+      else{
+        spiSend(0xFF);
+      }
+    }
+
+    locked = getCardStatus();
+      
+    spiSend(0xFF);
+    spiSend(0xFF);
+
+    i = 0xFFFF;
+    while(isBusy() && (--i));
+
+    return locked;
+  }
 }
 
 /** Completly erase a card
-	!! Use with caution !! this removes everything from a card, even the file system.
-	Use this to remove a lock with an unknown password from a card.
-	
-	\return true if the erase was successful
+  !! Use with caution !! this removes everything from a card, even the file system.
+  Use this to remove a lock with an unknown password from a card.
+
+  \return true if the erase was successful
 */
 bool Sd2Card::forceEraseCard(void) {
-	// set block size to 512 bytes
-	cardCommand(CMD16, 1);
-	
-	// enable 
-	if(cardCommand(CMD42, 0) != 0){
-		return false;
-	}
-	
-	spiSend(DATA_START_BLOCK);
-	spiSend(FORCE_ERASE);
-	
-	return true;
+  // set block size to 512 bytes
+  cardCommand(CMD16, 1);
+
+  // enable 
+  if(cardCommand(CMD42, 0) != 0){
+    return false;
+  }
+
+  spiSend(DATA_START_BLOCK);
+  spiSend(FORCE_ERASE);
+
+  return true;
 }
 
 /** Check status of card lock
-
-	\return true if card is locked
+  \return true if card is locked
 */
 bool Sd2Card::getCardStatus(void) {
-	bool cardOK = true;
-	
-	if(cardCommand(CMD13, 0) || spiRec()) {
-		cardOK = false;
-	}
-	
-	return cardOK;
+  bool cardOK = true;
+
+  if(cardCommand(CMD13, 0) || spiRec()) {
+    cardOK = false;
+  }
+
+  return cardOK;
 }

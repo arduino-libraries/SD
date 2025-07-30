@@ -42,6 +42,8 @@ uint8_t const CMD9 = 0X09;
 uint8_t const CMD10 = 0X0A;
 /** SEND_STATUS - read the card status register */
 uint8_t const CMD13 = 0X0D;
+/** SET_BLOCKLEN - change r/w block size */
+uint8_t const CMD16 = 0X10;
 /** READ_BLOCK - read a single data block from the card */
 uint8_t const CMD17 = 0X11;
 /** WRITE_BLOCK - write a single data block to the card */
