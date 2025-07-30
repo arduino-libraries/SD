@@ -242,8 +242,8 @@ class Sd2Card {
     uint8_t writeStop(void);
     uint8_t isBusy(void);
     bool lockCard(bool setLock, const char *pwd);
-	  bool forceEraseCard(void);
-	  bool getCardStatus(void);
+    bool forceEraseCard(void);
+    bool getCardStatus(void);
   private:
     uint32_t block_;
     uint8_t chipSelectPin_;
