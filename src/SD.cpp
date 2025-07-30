@@ -376,7 +376,7 @@ namespace SDLib {
     return card.lockCard(setLock, pwd);
   }
   
-  // !!CAUTION!! call this to completly erase a card,
+  // !!CAUTION!! call this to completely erase a card,
   // this will unlock a card but also delete the complete file system,
   // reformatting will be required!
   bool SDClass::forceEraseCard(){

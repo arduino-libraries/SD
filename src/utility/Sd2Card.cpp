@@ -822,7 +822,7 @@ bool Sd2Card::lockCard(bool setLock, const char *pwd){
   }
 }
 
-/** Completly erase a card
+/** Completely erase a card
   !! Use with caution !! this removes everything from a card, even the file system.
   Use this to remove a lock with an unknown password from a card.
 
