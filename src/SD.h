@@ -110,7 +110,7 @@ namespace SDLib {
       bool lockCard(bool setLock, const char pwd);
       // !!CAUTION!! this can be used as last resort if the password of a locked card is unknown,
       // this will remove the files and filesystem, a reformatting of the card is neccessary after this
-	  bool forceEraseCard();
+      bool forceEraseCard();
 
     private:
 
