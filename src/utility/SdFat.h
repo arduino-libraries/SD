@@ -437,7 +437,7 @@ class SdFile : public Print {
 
     // private data
     uint8_t   flags_;         // See above for definition of flags_ bits
-    uint8_t   type_;          // type of file see above for values
+    uint8_t   volatile type_; // type of file see above for values
     uint32_t  curCluster_;    // cluster for current file position
     uint32_t  curPosition_;   // current file position in bytes from beginning
     uint32_t  dirBlock_;      // SD block that contains directory entry for file
