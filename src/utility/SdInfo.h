@@ -42,6 +42,8 @@ uint8_t const CMD9 = 0X09;
 uint8_t const CMD10 = 0X0A;
 /** SEND_STATUS - read the card status register */
 uint8_t const CMD13 = 0X0D;
+/** SET_BLOCKLEN = Set Block length */
+uint8_t const CMD16 = 0X10;
 /** READ_BLOCK - read a single data block from the card */
 uint8_t const CMD17 = 0X11;
 /** WRITE_BLOCK - write a single data block to the card */
@@ -55,6 +57,8 @@ uint8_t const CMD32 = 0X20;
 uint8_t const CMD33 = 0X21;
 /** ERASE - erase all previously selected blocks */
 uint8_t const CMD38 = 0X26;
+/** SD_LOCK_UNLOCK - Sends lock/unlock command with password */
+uint8_t const CMD42 = 0X2A;
 /** APP_CMD - escape for application specific command */
 uint8_t const CMD55 = 0X37;
 /** READ_OCR - read the OCR register of a card */
