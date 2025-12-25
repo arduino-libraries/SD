@@ -57,12 +57,26 @@ defined(__AVR_ATmega809__) || defined(__AVR_ATmega808__)
 
 //------------------------------------------------------------------------------
 /** struct for mapping digital pins */
+#if defined(__AVR_ATtiny1614__)
+// This is compatible with megaTinyCore
+// TODO: change this if to match all AVR-1 chips
+
+struct pin_map_t {
+  volatile VPORT_t* port;
+  uint8_t bit;
+};
+
+#else
+
 struct pin_map_t {
   volatile uint8_t* ddr;
   volatile uint8_t* pin;
   volatile uint8_t* port;
   uint8_t bit;
 };
+
+#endif // defined(__AVR_ATtiny1614__) else
+
 //------------------------------------------------------------------------------
 #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
 // Mega
@@ -423,6 +437,53 @@ static const pin_map_t digitalPinMap[] = {
   {&DDRF, &PINF, &PORTF, 6},  // F6 44
   {&DDRF, &PINF, &PORTF, 7}   // F7 45
 };
+
+#elif defined(__AVR_ATtiny1614__)
+
+// Two Wire (aka I2C) ports
+uint8_t const SDA_PIN = 8;
+uint8_t const SCL_PIN = 9;
+
+// SPI port
+uint8_t const SS_PIN = 0;
+uint8_t const MOSI_PIN = 8;
+uint8_t const MISO_PIN = 9;
+uint8_t const SCK_PIN = 10;
+
+static const pin_map_t digitalPinMap[] = {
+  {&VPORTA, 4},
+  {&VPORTA, 5},
+  {&VPORTA, 6},
+  {&VPORTA, 7},
+  {&VPORTB, 3},
+  {&VPORTB, 2},
+  // Right side, bottom to top
+  {&VPORTB, 1},
+  {&VPORTB, 0},
+  // skip PA0 UPDI,
+  {&VPORTA, 1},
+  {&VPORTA, 2},
+  {&VPORTA, 3},
+  {&VPORTA, 0}
+};
+
+/* From megaTinyCore txy4 pins_arduino.h
+  PA, // 0  PA4
+	PA, // 1  PA5
+	PA, // 2  PA6
+	PA, // 3  PA7
+	PB, // 4  PB3
+	PB, // 5  PB2
+	// Right side, bottom to top
+	PB, // 6  PB1
+	PB, // 7  PB0
+	// skip PA0 UPDI
+	PA, // 8  PA1
+	PA, // 9  PA2
+	PA, // 10 PA3
+	PA  // 11 PA0
+*/
+
 //------------------------------------------------------------------------------
 #else  // defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
 // 168 and 328 Arduinos
@@ -461,6 +522,60 @@ static const pin_map_t digitalPinMap[] = {
 };
 #endif  // defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
 //------------------------------------------------------------------------------
+
+// Now this part defines some helper functions to configure, read and write the pins_arduino
+
+#if defined(__AVR_ATtiny1614__)
+// AVR-1 boards
+
+static const uint8_t digitalPinCount = sizeof(digitalPinMap) / sizeof(pin_map_t);
+
+uint8_t badPinNumber(void)
+__attribute__((error("Pin number is too large or not a constant")));
+
+static inline __attribute__((always_inline))
+uint8_t getPinMode(uint8_t pin) {
+  if (__builtin_constant_p(pin) && pin < digitalPinCount) {
+    return ((*digitalPinMap[pin].port).DIR >> digitalPinMap[pin].bit) & 1;
+  } else {
+    return badPinNumber();
+  }
+}
+static inline __attribute__((always_inline))
+void setPinMode(uint8_t pin, uint8_t mode) {
+  if (__builtin_constant_p(pin) && pin < digitalPinCount) {
+    if (mode) {
+      (*digitalPinMap[pin].port).DIR |= 1 << digitalPinMap[pin].bit;
+    } else {
+      (*digitalPinMap[pin].port).DIR &= ~(1 << digitalPinMap[pin].bit);
+    }
+  } else {
+    badPinNumber();
+  }
+}
+static inline __attribute__((always_inline))
+uint8_t fastDigitalRead(uint8_t pin) {
+  if (__builtin_constant_p(pin) && pin < digitalPinCount) {
+    return ((*digitalPinMap[pin].port).IN >> digitalPinMap[pin].bit) & 1;
+  } else {
+    return badPinNumber();
+  }
+}
+static inline __attribute__((always_inline))
+void fastDigitalWrite(uint8_t pin, uint8_t value) {
+  if (__builtin_constant_p(pin) && pin < digitalPinCount) {
+    if (value) {
+      (*digitalPinMap[pin].port).OUT |= 1 << digitalPinMap[pin].bit;
+    } else {
+      (*digitalPinMap[pin].port).OUT &= ~(1 << digitalPinMap[pin].bit);
+    }
+  } else {
+    badPinNumber();
+  }
+}
+
+#else // AVR-0 boards
+
 static const uint8_t digitalPinCount = sizeof(digitalPinMap) / sizeof(pin_map_t);
 
 uint8_t badPinNumber(void)
@@ -506,6 +621,8 @@ void fastDigitalWrite(uint8_t pin, uint8_t value) {
     badPinNumber();
   }
 }
+#endif // defined(__AVR_ATtiny1614__)
+
 #endif  // Sd2PinMap_h
 
 #elif defined (__CPU_ARC__)
