@@ -35,7 +35,7 @@ uint8_t const SPI_QUARTER_SPEED = 2;
    USE_SPI_LIB: if set, use the SPI library bundled with Arduino IDE, otherwise
    run with a standalone driver for AVR.
 */
-#define USE_SPI_LIB
+//#define USE_SPI_LIB //moved line 56
 /**
    Define MEGA_SOFT_SPI non-zero to use software SPI on Mega Arduinos.
    Pins used are SS 10, MOSI 11, MISO 12, and SCK 13.
@@ -53,6 +53,7 @@ uint8_t const SPI_QUARTER_SPEED = 2;
 // SPI pin definitions
 //
 #ifndef SOFTWARE_SPI
+   #define USE_SPI_LIB
   // hardware pin defs
 
   // include pins_arduino.h or variant.h depending on architecture, via Arduino.h
