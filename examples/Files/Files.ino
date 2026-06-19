@@ -42,7 +42,7 @@ while (!Serial);
   }
   Serial.println("initialization done.");
 
-  if (SD.exists("example.txt")) {
+  if (SD.exists("/example.txt")) {
     Serial.println("example.txt exists.");
   } else {
     Serial.println("example.txt doesn't exist.");
@@ -50,11 +50,11 @@ while (!Serial);
 
   // open a new file and immediately close it:
   Serial.println("Creating example.txt...");
-  myFile = SD.open("example.txt", FILE_WRITE);
+  myFile = SD.open("/example.txt", FILE_WRITE);
   myFile.close();
 
   // Check to see if the file exists:
-  if (SD.exists("example.txt")) {
+  if (SD.exists("/example.txt")) {
     Serial.println("example.txt exists.");
   } else {
     Serial.println("example.txt doesn't exist.");
@@ -62,9 +62,9 @@ while (!Serial);
 
   // delete the file:
   Serial.println("Removing example.txt...");
-  SD.remove("example.txt");
+  SD.remove("/example.txt");
 
-  if (SD.exists("example.txt")) {
+  if (SD.exists("/example.txt")) {
     Serial.println("example.txt exists.");
   } else {
     Serial.println("example.txt doesn't exist.");
