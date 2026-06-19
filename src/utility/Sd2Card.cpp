@@ -17,11 +17,12 @@
    along with the Arduino Sd2Card Library.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#define USE_SPI_LIB
+//#define USE_SPI_LIB //moved line 25
 #include <Arduino.h>
 #include "Sd2Card.h"
 //------------------------------------------------------------------------------
 #ifndef SOFTWARE_SPI
+#define USE_SPI_LIB
 #ifdef USE_SPI_LIB
 
   #ifndef SDCARD_SPI
