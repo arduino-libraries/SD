@@ -413,6 +413,6 @@ static inline uint8_t DIR_IS_SUBDIR(const dir_t* dir) {
 }
 /** Directory entry is for a file or subdirectory */
 static inline uint8_t DIR_IS_FILE_OR_SUBDIR(const dir_t* dir) {
-  return (dir->attributes & DIR_ATT_VOLUME_ID) == 0;
+  return (dir->attributes & (DIR_ATT_VOLUME_ID | DIR_ATT_SYSTEM | DIR_ATT_HIDDEN)) == 0;
 }
 #endif  // FatStructs_h

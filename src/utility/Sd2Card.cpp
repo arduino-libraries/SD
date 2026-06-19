@@ -359,6 +359,32 @@ fail:
 }
 //------------------------------------------------------------------------------
 /**
+   Return initialized pins to floating and dereference SPI lib.
+*/
+void Sd2Card::done() {
+  pinMode(chipSelectPin_, INPUT);
+  digitalWrite(chipSelectPin_, LOW);
+
+  #ifndef USE_SPI_LIB
+  pinMode(SPI_MISO_PIN, INPUT);
+  digitalWrite(SPI_MISO_PIN, LOW);
+  pinMode(SPI_MOSI_PIN, INPUT);
+  digitalWrite(SPI_MOSI_PIN, LOW);
+  pinMode(SPI_SCK_PIN, INPUT);
+  digitalWrite(SPI_SCK_PIN, LOW);
+  #endif
+
+  #ifndef SOFTWARE_SPI
+  #ifndef USE_SPI_LIB
+  pinMode(SS_PIN, INPUT);
+  digitalWrite(SS_PIN, LOW);
+  #else // USE_SPI_LIB
+  SDCARD_SPI.end();
+  #endif // USE_SPI_LIB
+  #endif // SOFTWARE_SPI
+}
+//------------------------------------------------------------------------------
+/**
    Enable or disable partial block reads.
 
    Enabling partial block reads improves performance by allowing a block

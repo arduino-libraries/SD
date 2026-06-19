@@ -203,16 +203,20 @@ uint8_t SdFile::dirEntry(dir_t* dir) {
    \param[out] name A 13 byte char array for the formatted name.
 */
 void SdFile::dirName(const dir_t& dir, char* name) {
-  uint8_t j = 0;
-  for (uint8_t i = 0; i < 11; i++) {
-    if (dir.name[i] == ' ') {
-      continue;
-    }
+  uint8_t i = 0, j = 0;
+  // unescape first character
+  if ((uint8_t) dir.name[i] == DIR_NAME_0XE5) {
+    name[j++] = 0xE5;
+    i++;
+  }
+  for (; i < 11; i++) {
     if (i == 8) {
+      while (j > 0 && name[j-1] == ' ') j--;
       name[j++] = '.';
     }
     name[j++] = dir.name[i];
   }
+  while (name[j-1] == ' ') j--;
   name[j] = 0;
 }
 //------------------------------------------------------------------------------
@@ -288,10 +292,12 @@ uint8_t SdFile::make83Name(const char* str, uint8_t* name) {
   uint8_t n = 7;  // max index for part before dot
   uint8_t i = 0;
   // blank fill name and extension
-  while (i < 11) {
-    name[i++] = ' ';
+  memset(name, ' ', 11);
+  // escape first character
+  if ((uint8_t) *str == 0xE5) {
+    name[i++] = DIR_NAME_0XE5;
+    str++;
   }
-  i = 0;
   while ((c = *str++) != '\0') {
     if (c == '.') {
       if (n == 10) {
@@ -301,21 +307,17 @@ uint8_t SdFile::make83Name(const char* str, uint8_t* name) {
       i = 8;   // place for extension
     } else {
       // illegal FAT characters
-      uint8_t b;
       #if defined(__AVR__)
-      PGM_P p = PSTR("|<>^+=?/[];,*\"\\");
-      while ((b = pgm_read_byte(p++))) if (b == c) {
+      if (strchr_P(PSTR("|<>:+=?/[];,*\"\\"), c)) {
           return false;
         }
-      #elif defined(__arm__)
-      const uint8_t valid[] = "|<>^+=?/[];,*\"\\";
-      const uint8_t *p = valid;
-      while ((b = *p++)) if (b == c) {
+      #else
+      if (strchr("|<>:+=?/[];,*\"\\", c)) {
           return false;
         }
       #endif
       // check size and only allow ASCII printable characters
-      if (i > n || c < 0X21 || c > 0X7E) {
+      if (i > n || c < 0x20 || c == 0x7F) {
         return false;
       }
       // only upper case allowed in 8.3 names - convert lower to upper
@@ -323,7 +325,7 @@ uint8_t SdFile::make83Name(const char* str, uint8_t* name) {
     }
   }
   // must have a file name, extension is optional
-  return name[0] != ' ';
+  return i > 0;
 }
 //------------------------------------------------------------------------------
 /** Make a new directory.
@@ -690,11 +692,13 @@ uint8_t SdFile::openRoot(SdVolume* vol) {
    \param[in] width Blank fill name if length is less than \a width.
 */
 void SdFile::printDirName(const dir_t& dir, uint8_t width) {
-  uint8_t w = 0;
-  for (uint8_t i = 0; i < 11; i++) {
-    if (dir.name[i] == ' ') {
-      continue;
-    }
+  uint8_t i = 0, w = 0;
+  // unescape first character
+  if ((uint8_t) dir.name[i] == DIR_NAME_0XE5) {
+    Serial.write(0xE5);
+    i++; w++;
+  }
+  for (; i < 11; i++) {
     if (i == 8) {
       Serial.print('.');
       w++;
@@ -1041,7 +1045,7 @@ uint8_t SdFile::rmRfStar(void) {
     }
 
     // skip if part of long file name or volume label in root
-    if (!DIR_IS_FILE_OR_SUBDIR(p)) {
+    if (p->attributes & DIR_ATT_VOLUME_ID) {
       continue;
     }
 
