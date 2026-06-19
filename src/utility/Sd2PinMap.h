@@ -17,7 +17,7 @@
    along with the Arduino SdFat Library.  If not, see
    <http://www.gnu.org/licenses/>.
 */
-#if defined(__arm__) // Arduino Due Board follows
+#if defined(__arm__) || defined(__XTENSA__) || defined(ESP32) // This line allows use on Espressif ESP32 boards
 
 #ifndef Sd2PinMap_h
   #define Sd2PinMap_h
