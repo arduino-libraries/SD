@@ -523,6 +523,8 @@ void fastDigitalWrite(uint8_t pin, uint8_t value) {
 
 #endif	// Arduino ARC
 
+#elif defined(ESP32)
+// default SPI ports
 #else
 #error Architecture or board not supported.
 #endif
