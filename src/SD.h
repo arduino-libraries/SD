@@ -28,11 +28,12 @@ namespace SDLib {
   class File : public Stream {
     private:
       char _name[13]; // our name
-      SdFile *_file;  // underlying file pointer
+      SdFile _file;   // underlying file object
 
     public:
-      File(SdFile f, const char *name);     // wraps an underlying SdFile
+      File(const SdFile & f, const char *name); // wraps an underlying SdFile
       File(void);      // 'empty' constructor
+      virtual ~File(); // destructor
       virtual size_t write(uint8_t);
       virtual size_t write(const uint8_t *buf, size_t size);
       virtual int availableForWrite();
@@ -46,7 +47,7 @@ namespace SDLib {
       uint32_t size();
       void close();
       operator bool();
-      char * name();
+      char *name();
 
       bool isDirectory(void);
       File openNextFile(uint8_t mode = O_RDONLY);
