@@ -354,7 +354,7 @@ namespace SDLib {
            volume.init(card) &&
            root.openRoot(volume);
   }
-
+#ifndef SOFTWARE_SPI //Added compiler directive so that MEGA works with this code
   bool SDClass::begin(uint32_t clock, uint8_t csPin) {
     if (root.isOpen()) {
       root.close();
@@ -365,7 +365,19 @@ namespace SDLib {
            volume.init(card) &&
            root.openRoot(volume);
   }
+#else
+  bool SDClass::begin(uint32_t clock, uint8_t csPin) {
+    if (root.isOpen()) {
+      root.close();
+    }
 
+    return card.init(SPI_HALF_SPEED, csPin) &&
+           card.setSpiClock(clock) &&
+           volume.init(card) &&
+           root.openRoot(volume);
+  }
+#endif  //SOFTWARE_SPI
+  
   //call this when a card is removed. It will allow you to insert and initialise a new card.
   void SDClass::end() {
     root.close();
