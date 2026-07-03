@@ -160,6 +160,14 @@ uint8_t const SD_CARD_ERROR_WRITE_PROGRAMMING = 0X14;
 uint8_t const SD_CARD_ERROR_WRITE_TIMEOUT = 0X15;
 /** incorrect rate selected */
 uint8_t const SD_CARD_ERROR_SCK_RATE = 0X16;
+/** error reading status */
+uint8_t const SD_CARD_ERROR_SEND_STATUS = 0X17;
+/** card is locked */
+uint8_t const SD_CARD_ERROR_LOCKED = 0X18;
+/** error lock/unlock card */
+uint8_t const SD_CARD_ERROR_CMD42 = 0X19;
+/** error lock/unlock card */
+uint8_t const SD_CARD_ERROR_CMD16 = 0X1A;
 //------------------------------------------------------------------------------
 // card types
 /** Standard capacity V1 SD card */
@@ -241,6 +249,8 @@ class Sd2Card {
     uint8_t writeStart(uint32_t blockNumber, uint32_t eraseCount);
     uint8_t writeStop(void);
     uint8_t isBusy(void);
+    uint8_t cardCommand(uint8_t cmd, uint32_t arg);
+    uint8_t lockUnlockCard(uint8_t flags, int pass_len, uint8_t* pwd);
   private:
     uint32_t block_;
     uint8_t chipSelectPin_;
@@ -255,7 +265,6 @@ class Sd2Card {
       cardCommand(CMD55, 0);
       return cardCommand(cmd, arg);
     }
-    uint8_t cardCommand(uint8_t cmd, uint32_t arg);
     void error(uint8_t code) {
       errorCode_ = code;
     }
