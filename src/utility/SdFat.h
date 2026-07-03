@@ -151,7 +151,19 @@ uint16_t const FAT_DEFAULT_TIME = (1 << 11);
 class SdFile : public Print {
   public:
     /** Create an instance of SdFile. */
-    SdFile(void) : type_(FAT_FILE_TYPE_CLOSED) {}
+    SdFile(void)
+    : flags_(0)
+    , type_(FAT_FILE_TYPE_CLOSED)
+    , curCluster_(0)
+    , curPosition_(0)
+    , dirBlock_(0)
+    , dirIndex_(0)
+    , fileSize_(0)
+    , firstCluster_(0)
+    , vol_(0)
+    {}
+
+    virtual ~SdFile() {}
     /**
        writeError is set to true if an error occurs during a write().
        Set writeError to false before calling print() and/or write() and check
