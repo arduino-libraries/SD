@@ -106,6 +106,14 @@ namespace SDLib {
         return rmdir(filepath.c_str());
       }
 
+      Sd2Card& getCard() {
+        return card;
+      }
+
+      SdVolume& getVolume() {
+        return volume;
+      }
+
     private:
 
       // This is used to determine the mode used to open a file
