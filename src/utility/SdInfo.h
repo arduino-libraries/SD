@@ -190,8 +190,8 @@ typedef struct CSDV2 {
   unsigned write_blk_misalign : 1;
   unsigned read_bl_partial : 1;
   // byte 7
-  unsigned reserved3 : 2;
   unsigned c_size_high : 6;
+  unsigned reserved3 : 2;
   // byte 8
   uint8_t c_size_mid;
   // byte 9
