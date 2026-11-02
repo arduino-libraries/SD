@@ -44,7 +44,9 @@ uint8_t const SPI_QUARTER_SPEED = 2;
    on Mega Arduinos.  Software SPI works well with GPS Shield V1.1
    but many SD cards will fail with GPS Shield V1.0.
 */
-#define MEGA_SOFT_SPI 0
+#ifndef MEGA_SOFT_SPI
+  #define MEGA_SOFT_SPI 0
+#endif  // MEGA_SOFT_SPI
 //------------------------------------------------------------------------------
 #if MEGA_SOFT_SPI && (defined(__AVR_ATmega1280__)||defined(__AVR_ATmega2560__))
   #define SOFTWARE_SPI
